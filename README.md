@@ -325,93 +325,98 @@ After Day 14, restart at Day 1 with harder constraints:
 
 ## Skills Covered
 
-Active Directory
-User Provisioning
-Account Management
-Group Membership
-Role-Based Access Control
-Organisational Units
-Security Groups
-Account Lockout Investigation
-Bulk User Provisioning
-Offboarding
+---
 
-Windows Server 2022
-Event Viewer
-Event ID Analysis
-DNS Manager
-DHCP Manager
-Windows Firewall
-Inbound and Outbound Rules
-PowerShell
-Get-ADUser
-Search-ADAccount
-Get-NetFirewallRule
-Get-EventLog
-Export-Csv
+### Active Directory
+- User Provisioning
+- Account Management
+- Group Membership
+- Role-Based Access Control
+- Organisational Units
+- Security Groups
+- Account Lockout Investigation
+- Bulk User Provisioning
+- Offboarding
 
-Networking
-DNS Resolution
-DHCP Lease Verification
-Ping
-Tracert
-Nslookup
-IP Configuration
-Virtual Networking in VMware
+---
 
-VMware Workstation
-VM Health Checks
-Network Adapter Configuration
-Remote Desktop Protocol
-WinRM
+### Windows Server 2022
+- Event Viewer
+- Event ID Analysis
+- DNS Manager
+- DHCP Manager
+- Windows Firewall
+- Inbound and Outbound Rules
+- PowerShell — Get-ADUser, Search-ADAccount, Get-NetFirewallRule, Get-EventLog, Export-Csv
 
-Microsoft 365
-Entra ID
-Licence Assignment
-Account Management
-Microsoft Graph API
-Exchange Online
-SPF Records
-DKIM Records
-MX Records
-Mail Flow Validation
-Microsoft 365 Admin Centre
+---
 
-ServiceNow
-Incident Creation
-Incident Updates
-Incident Closure
-ITSM Workflow
+### Networking
+- DNS Resolution
+- DHCP Lease Verification
+- Ping / Tracert / Nslookup
+- IP Configuration
+- Virtual Networking in VMware
 
-Linux
-SSH
-Systemctl
-Disk Usage
-Process Monitoring
-User Management
-System Log Reading
-Bash Navigation
+---
 
-Python
-CSV Reading and Writing
-WinRM Integration
-REST API Calls
-Error Handling
-Input Validation
-Environment Variables with dotenv
-Subprocess
-Modular Scripting
-Audit Logging Automation
+### VMware Workstation
+- VM Health Checks
+- Network Adapter Configuration
+- Remote Desktop Protocol
+- WinRM
 
-GitHub
-Git Init
-Git Add
-Git Commit
-Git Push
-Repository Structure
-gitignore Configuration
-Version Control Habits
+---
 
+### Microsoft 365
+- Entra ID
+- Licence Assignment
+- Account Management
+- Microsoft Graph API
+- Exchange Online
+- SPF / DKIM / MX Records
+- Mail Flow Validation
+- Microsoft 365 Admin Centre
+
+---
+
+### ServiceNow
+- Incident Creation
+- Incident Updates
+- Incident Closure
+- ITSM Workflow
+
+---
+
+### Linux
+- SSH
+- Systemctl
+- Disk Usage
+- Process Monitoring
+- User Management
+- System Log Reading
+- Bash Navigation
+
+---
+
+### Python
+- CSV Reading and Writing
+- WinRM Integration
+- REST API Calls
+- Error Handling
+- Input Validation
+- Environment Variables with dotenv
+- Subprocess
+- Modular Scripting
+- Audit Logging Automation
+
+---
+
+### GitHub
+- Git Init / Add / Commit / Push
+- Repository Structure
+- gitignore Configuration
+- Version Control Habits
 -----
 
 ## Audit Trail
