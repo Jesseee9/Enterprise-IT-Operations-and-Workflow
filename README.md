@@ -309,7 +309,7 @@ Covers Active Directory, networking, Microsoft 365, Entra ID, Linux, PowerShell,
 - Do not move to the next ticket until the current one is closed in ServiceNow
 - Push everything to GitHub at the end
 
-**Skills touched:** All of the above — this is your weekly assessment
+**Skills touched:** Active Directory, Entra ID, ServiceNow, PowerShell, Python logging, VMware, Windows Server, GitHub
 
 -----
 
@@ -320,6 +320,97 @@ After Day 14, restart at Day 1 with harder constraints:
 - **Loop 2:** Introduce a deliberate error in each scenario (wrong group, incorrect IP, expired licence) — find and fix it
 - **Loop 3:** Add a time limit — complete each task within 20 minutes
 - **Loop 4:** Do Day 14 Shift Simulation only — four tickets, no notes, from memory
+
+-----
+
+## Skills Covered
+
+Active Directory
+User Provisioning
+Account Management
+Group Membership
+Role-Based Access Control
+Organisational Units
+Security Groups
+Account Lockout Investigation
+Bulk User Provisioning
+Offboarding
+
+Windows Server 2022
+Event Viewer
+Event ID Analysis
+DNS Manager
+DHCP Manager
+Windows Firewall
+Inbound and Outbound Rules
+PowerShell
+Get-ADUser
+Search-ADAccount
+Get-NetFirewallRule
+Get-EventLog
+Export-Csv
+
+Networking
+DNS Resolution
+DHCP Lease Verification
+Ping
+Tracert
+Nslookup
+IP Configuration
+Virtual Networking in VMware
+
+VMware Workstation
+VM Health Checks
+Network Adapter Configuration
+Remote Desktop Protocol
+WinRM
+
+Microsoft 365
+Entra ID
+Licence Assignment
+Account Management
+Microsoft Graph API
+Exchange Online
+SPF Records
+DKIM Records
+MX Records
+Mail Flow Validation
+Microsoft 365 Admin Centre
+
+ServiceNow
+Incident Creation
+Incident Updates
+Incident Closure
+ITSM Workflow
+
+Linux
+SSH
+Systemctl
+Disk Usage
+Process Monitoring
+User Management
+System Log Reading
+Bash Navigation
+
+Python
+CSV Reading and Writing
+WinRM Integration
+REST API Calls
+Error Handling
+Input Validation
+Environment Variables with dotenv
+Subprocess
+Modular Scripting
+Audit Logging Automation
+
+GitHub
+Git Init
+Git Add
+Git Commit
+Git Push
+Repository Structure
+gitignore Configuration
+Version Control Habits
 
 -----
 
