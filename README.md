@@ -10,7 +10,7 @@ Built and maintained by Jesse Adejoh as part of ongoing IT support skill develop
 
 |Component          |Details                                           |
 |-------------------|--------------------------------------------------|
-|Windows Server 2022|192.168.128.130 — corp.local domain               |
+|Windows Server 2022|192.168.10.10 — corp.local domain                 |
 |Windows 11 VM      |192.168.10.60 — DESKTOP-QL161MH                   |
 |Ubuntu Linux VM    |IP confirmed at task time                         |
 |ServiceNow PDI     |dev268884                                         |
@@ -57,7 +57,7 @@ Credentials are loaded from a `.env` file — never hardcoded.
 ```
 SN_USER=admin
 SN_PASSWORD=your_pdi_password
-SERVER_IP=192.168.128.130
+SERVER_IP=192.168.10.10
 DOMAIN=corp.local
 ADMIN_USER=Administrator
 ADMIN_PASS=your_server_password
@@ -118,7 +118,7 @@ python scripts/provision_user.py --first Sarah --last Blake --dept Sales --group
 1. Run the connectivity check script:
 
 ```bash
-python scripts/connectivity_check.py --target 192.168.128.130
+python scripts/connectivity_check.py --target 192.168.10.10
 ```
 
 1. The script runs ping, nslookup, and tracert — saves output to `logs/evidence/`
@@ -570,13 +570,13 @@ server_ip = os.getenv("SERVER_IP")
 
 **Ticket Queue:**
 
-|#|Type          |Task                                                                                                                           |
-|-|--------------|-------------------------------------------------------------------------------------------------------------------------------|
-|1|New starter   |Create AD account for James.Okafor, department = Finance, assign to Finance group                                              |
-|2|Locked account|Sarah.Blake is locked out — check Event Viewer for Event ID 4625, run auto_unlock.py, verify with PowerShell                   |
-|3|Connectivity  |A user cannot reach the server — run connectivity_check.py against 192.168.128.130, review the evidence file, document findings|
-|4|Offboarding   |A contractor’s account needs disabling — run offboard_user.py, verify in AD and Entra ID, confirm groups are cleared           |
-|5|Health check  |Export system errors with PowerShell, run log_analyser.py, confirm no critical unresolved errors                               |
+|#|Type          |Task                                                                                                                         |
+|-|--------------|-----------------------------------------------------------------------------------------------------------------------------|
+|1|New starter   |Create AD account for James.Okafor, department = Finance, assign to Finance group                                            |
+|2|Locked account|Sarah.Blake is locked out — check Event Viewer for Event ID 4625, run auto_unlock.py, verify with PowerShell                 |
+|3|Connectivity  |A user cannot reach the server — run connectivity_check.py against 192.168.10.10, review the evidence file, document findings|
+|4|Offboarding   |A contractor’s account needs disabling — run offboard_user.py, verify in AD and Entra ID, confirm groups are cleared         |
+|5|Health check  |Export system errors with PowerShell, run log_analyser.py, confirm no critical unresolved errors                             |
 
 **Rules:**
 
