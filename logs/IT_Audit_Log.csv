@@ -1,0 +1,21 @@
+Timestamp,Action,Status,Ticket_ID,Actor,Target,Notes
+2026-05-31T18:45:33,ProvisionUser,failure,N/A,provision_user.py,Sarah.Blake,"HTTPConnectionPool(host='192.168.10.10', port=5985): Max retries exceeded with url: /wsman (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.10.10', port=5985) at 0x2189058fb60>, 'Connection to 192.168.10.10 timed out. (connect timeout=30)'))"
+2026-05-31T18:47:46,ProvisionUser,failure,N/A,provision_user.py,Sarah.Blake,"HTTPConnectionPool(host='192.168.10.10', port=5985): Max retries exceeded with url: /wsman (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.10.10', port=5985) at 0x24e4d7cfb60>, 'Connection to 192.168.10.10 timed out. (connect timeout=30)'))"
+2026-05-31T18:50:39,ProvisionUser,failure,N/A,provision_user.py,Sarah.Blake,"HTTPConnectionPool(host='192.168.10.10', port=5985): Max retries exceeded with url: /wsman (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.10.10', port=5985) at 0x1893060fb60>, 'Connection to 192.168.10.10 timed out. (connect timeout=30)'))"
+2026-05-31T18:58:52,ProvisionUser,failure,N/A,provision_user.py,Sarah.Blake,"HTTPConnectionPool(host='192.168.10.10', port=5985): Max retries exceeded with url: /wsman (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.10.10', port=5985) at 0x1c6df6afb60>, 'Connection to 192.168.10.10 timed out. (connect timeout=30)'))"
+2026-05-31T19:12:35,ProvisionUser,failure,N/A,provision_user.py,Sarah.Blake,"HTTPConnectionPool(host='192.168.169.10', port=5985): Max retries exceeded with url: /wsman (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.169.10', port=5985) at 0x1f23695fb60>, 'Connection to 192.168.169.10 timed out. (connect timeout=30)'))"
+2026-05-31T19:23:21,ProvisionUser,failure,N/A,provision_user.py,Sarah.Blake,"Add-ADGroupMember : Cannot find an object with identity: 'Sales' under: 'DC=corp,DC=local'.
+At line:1 char:1
++ Add-ADGroupMember -Identity ""Sales"" -Members ""Sarah.Blake""
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Sales:ADGroup) [Add-ADGroupMember], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,M 
+   icrosoft.ActiveDirectory.Management.Commands.AddADGroupMember"
+2026-05-31T19:24:47,ProvisionUser,failure,N/A,provision_user.py,Sarah.Blake,"New-ADUser : The specified account already exists
+At line:2 char:9
++         New-ADUser `
++         ~~~~~~~~~~~~
+    + CategoryInfo          : ResourceExists: (CN=Sarah Blake,CN=Users,DC=corp,DC=local:String) [New-ADUser], ADIdenti 
+   tyAlreadyExistsException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1316,Microsoft.ActiveDirectory.Management.Commands.NewADUser"
+2026-05-31T19:26:21,ProvisionUser,success,INC0010001,provision_user.py,Sarah.Blake,AD user created. Group: Sales. Dept: Sales.

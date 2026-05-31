@@ -26,7 +26,7 @@ def provision_user(first, last, dept, group, password):
         session = winrm.Session(
             f"http://{server_ip}:5985/wsman",
             auth=(f"{admin_user}", admin_pass),
-            transport="ntlm"
+            transport="basic"
         )
 
         create_cmd = f"""
