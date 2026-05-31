@@ -1,2 +1,4 @@
 .env
 logs/evidence/
+__pycache__/
+*.pyc
