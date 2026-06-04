@@ -22,3 +22,25 @@ def log_action(action, status, ticket_id, actor, target, notes=""):
             "Notes": notes
         })
     print(f"[LOGGED] {action} | {status} | {target}")
+
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Log actions to the audit log.")
+    parser.add_argument("--action", required=True, help="Action performed")
+    parser.add_argument("--status", required=True, help="Status of the action")
+    parser.add_argument("--ticket", required=True, help="Ticket ID")
+    parser.add_argument("--actor", required=True, help="Actor performing the action")
+    parser.add_argument("--target", required=True, help="Target of the action")
+    parser.add_argument("--notes", default="", help="Optional notes")
+    args = parser.parse_args()
+    
+    log_action(
+        action=args.action,
+        status=args.status,
+        ticket_id=args.ticket,
+        actor=args.actor,
+        target=args.target,
+        notes=args.notes
+    )
+

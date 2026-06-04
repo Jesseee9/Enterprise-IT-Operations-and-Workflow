@@ -51,3 +51,43 @@ def create_servicenow_incident(short_description, category, details):
     except requests.exceptions.RequestException as e:
         print(f"[!] Connection error reaching ServiceNow: {e}")
         return "INC_CONN_ERR"
+
+
+def resolve_incident(sys_id, resolution_notes):
+    instance = os.getenv("SN_INSTANCE", "dev268884")
+    url = f"https://{instance}.service-now.com/api/now/table/incident/{sys_id}"
+    user = os.getenv("SN_USER", "admin")
+    password = os.getenv("SN_PASSWORD")
+
+    if not password:
+        print("[!] ERROR: SN_PASSWORD not set in .env")
+        return
+
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    }
+
+    payload = {
+        "state": "6",
+        "close_code": "Solved (Permanently)",
+        "close_notes": resolution_notes
+    }
+
+    try:
+        response = requests.patch(
+            url,
+            auth=(user, password),
+            headers=headers,
+            data=json.dumps(payload),
+            timeout=10
+        )
+
+        if response.status_code == 200:
+            print(f"[+] Incident resolved successfully (SysID: {sys_id})")
+        else:
+            print(f"[!] ServiceNow API failed — status {response.status_code}")
+            print(response.text)
+
+    except requests.exceptions.RequestException as e:
+        print(f"[!] Connection error reaching ServiceNow: {e}")
