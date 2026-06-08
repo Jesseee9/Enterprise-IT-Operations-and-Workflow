@@ -20,3 +20,4 @@ At line:2 char:9
     + FullyQualifiedErrorId : ActiveDirectoryServer:1316,Microsoft.ActiveDirectory.Management.Commands.NewADUser"
 2026-05-31T19:26:21,ProvisionUser,success,INC0010001,provision_user.py,Sarah.Blake,AD user created. Group: Sales. Dept: Sales.
 2026-06-04T21:18:13,GroupUpdate,success,INC0010003,Manual,sarah.blake,"Group membership updated - removed Sales, added IT-Staff"
+2026-06-08T08:39:04,DNSDHCPCheck,success,INC0010004,Manual,192.168.10.50,
