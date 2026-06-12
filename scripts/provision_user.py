@@ -66,7 +66,7 @@ def provision_user(first, last, dept, group, password):
         short_desc = f"New starter account created for {first} {last}"
         details = f"User {username} provisioned in corp.local. Department: {dept}. Group: {group}."
         print("[*] Raising ServiceNow incident...")
-        inc_number = create_servicenow_incident(short_desc, "Access", details)
+        inc_number, sys_id = create_servicenow_incident(short_desc, "Access", details)
 
         log_action(
             action="ProvisionUser",

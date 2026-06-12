@@ -42,15 +42,17 @@ def create_servicenow_incident(short_description, category, details):
             inc_number = data["result"]["number"]
             sys_id = data["result"]["sys_id"]
             print(f"[+] ServiceNow incident raised: {inc_number} (SysID: {sys_id})")
-            return inc_number
+            return inc_number, sys_id
         else:
             print(f"[!] ServiceNow API failed — status {response.status_code}")
             print(response.text)
-            return "INC_API_ERR"
+            return "INC_API_ERR", None
 
     except requests.exceptions.RequestException as e:
         print(f"[!] Connection error reaching ServiceNow: {e}")
-        return "INC_CONN_ERR"
+        return "INC_CONN_ERR", None
+
+create_incident = create_servicenow_incident
 
 
 def resolve_incident(sys_id, resolution_notes):
@@ -70,7 +72,7 @@ def resolve_incident(sys_id, resolution_notes):
 
     payload = {
         "state": "6",
-        "close_code": "Solved (Permanently)",
+        "close_code": "Solution provided",
         "close_notes": resolution_notes
     }
 

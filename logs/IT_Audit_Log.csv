@@ -21,3 +21,7 @@ At line:2 char:9
 2026-05-31T19:26:21,ProvisionUser,success,INC0010001,provision_user.py,Sarah.Blake,AD user created. Group: Sales. Dept: Sales.
 2026-06-04T21:18:13,GroupUpdate,success,INC0010003,Manual,sarah.blake,"Group membership updated - removed Sales, added IT-Staff"
 2026-06-08T08:39:04,DNSDHCPCheck,success,INC0010004,Manual,192.168.10.50,"VMnet1 and VMnet2 adapters were swapped on Windows Server VM. Corrected in VMware settings. DHCP lease confirmed at 192.168.10.50. DNS resolving DESKTOP-QL161MH.corp.local correctly via nslookup."
+2026-06-12T08:56:03,EntraProvision,failure,N/A,entra_provision.py,testcontractor@adejohmichael24icloud.onmicrosoft.com,401 Client Error: Unauthorized for url: https://login.microsoftonline.com/775c5afa-0fcd-4c17-8d14-da8f257772e7/oauth2/v2.0/token
+2026-06-12T09:28:04,EntraProvision,success,INC0010006,entra_provision.py,testcontractor@adejohmichael24icloud.onmicrosoft.com,Entra ID user created. ServiceNow incident raised.
+2026-06-12T09:34:46,EntraProvision,failure,N/A,entra_provision.py,testcontractor@adejohmichael24icloud.onmicrosoft.com,400 Client Error: Bad Request for url: https://graph.microsoft.com/v1.0/users
+2026-06-12T09:36:07,EntraProvision,success,INC0010007,entra_provision.py,testcontractor2@adejohmichael24icloud.onmicrosoft.com,Entra ID user created. ServiceNow incident raised.
