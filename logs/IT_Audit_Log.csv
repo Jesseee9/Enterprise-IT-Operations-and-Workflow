@@ -25,3 +25,7 @@ At line:2 char:9
 2026-06-12T09:28:04,EntraProvision,success,INC0010006,entra_provision.py,testcontractor@adejohmichael24icloud.onmicrosoft.com,Entra ID user created. ServiceNow incident raised.
 2026-06-12T09:34:46,EntraProvision,failure,N/A,entra_provision.py,testcontractor@adejohmichael24icloud.onmicrosoft.com,400 Client Error: Bad Request for url: https://graph.microsoft.com/v1.0/users
 2026-06-12T09:36:07,EntraProvision,success,INC0010007,entra_provision.py,testcontractor2@adejohmichael24icloud.onmicrosoft.com,Entra ID user created. ServiceNow incident raised.
+2026-06-14T16:14:45,auto_unlock,INFO,N/A,auto_unlock.py,N/A,No locked accounts found
+2026-06-14T16:17:18,auto_unlock,INFO,N/A,auto_unlock.py,N/A,No locked accounts found
+2026-06-14T16:28:03,auto_unlock,INFO,INC0010008,auto_unlock.py,svc_mid,Unlocked successfully
+2026-06-14T16:32:18,auto_unlock,INFO,INC0010009,auto_unlock.py,svc_mid,Unlocked successfully
