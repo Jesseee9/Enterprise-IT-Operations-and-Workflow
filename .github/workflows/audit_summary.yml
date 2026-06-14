@@ -1,0 +1,51 @@
+name: Audit Log Summary
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  summarise:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Generate audit summary
+        run: |
+          python - <<'EOF'
+          import csv
+          from collections import Counter
+
+          with open('logs/IT_Audit_Log.csv', newline='', encoding='utf-8') as f:
+              reader = csv.DictReader(f)
+              rows = list(reader)
+
+          total = len(rows)
+          statuses = Counter(r['Status'].strip().lower() for r in rows)
+          actions = Counter(r['Action'].strip() for r in rows)
+          last5 = rows[-5:]
+
+          print("## IT Ops Lab — Audit Summary")
+          print(f"**Total log entries:** {total}")
+          print(f"**Success:** {statuses.get('success', 0)}")
+          print(f"**Failure:** {statuses.get('failure', 0)}")
+          print(f"**Info:** {statuses.get('info', 0)}")
+          print(f"\n### Actions Run")
+          for action, count in actions.items():
+              print(f"- {action}: {count} entries")
+          print(f"\n### Last 5 Log Entries")
+          for r in last5:
+              notes = r['Notes'].strip()[:120] if r['Notes'].strip() else 'N/A'
+              print(f"- **{r['Timestamp']}** | {r['Action']} | {r['Status']} | Target: {r['Target']}")
+              print(f"  - Notes: {notes}")
+          EOF
+
+      - name: Post summary
+        run: echo "Audit summary complete"
