@@ -29,3 +29,54 @@ At line:2 char:9
 2026-06-14T16:17:18,auto_unlock,INFO,N/A,auto_unlock.py,N/A,No locked accounts found
 2026-06-14T16:28:03,auto_unlock,INFO,INC0010008,auto_unlock.py,svc_mid,Unlocked successfully
 2026-06-14T16:32:18,auto_unlock,INFO,INC0010009,auto_unlock.py,svc_mid,Unlocked successfully
+2026-06-15T17:12:41,BulkProvision,success,INC0010011,bulk_provision.py,James.Carter,User created and group assigned
+2026-06-15T17:12:43,BulkProvision,failure,INC0010011,bulk_provision.py,Priya.Sharma,"User created but group assignment failed: Add-ADGroupMember : Cannot find an object with identity: 'HR-Staff' under: 'DC=corp,DC=local'.
+At line:1 char:1
++ Add-ADGroupMember -Identity ""HR-Staff"" -Members ""Priya.Sharma""
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (HR-Staff:ADGroup) [Add-ADGroupMember], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,M 
+   icrosoft.ActiveDirectory.Management.Commands.AddADGroupMember"
+2026-06-15T17:12:45,BulkProvision,failure,INC0010011,bulk_provision.py,Daniel.Okonkwo,"User created but group assignment failed: Add-ADGroupMember : Cannot find an object with identity: 'Finance-Staff' under: 'DC=corp,DC=local'.
+At line:1 char:1
++ Add-ADGroupMember -Identity ""Finance-Staff"" -Members ""Daniel.Okonkwo""
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Finance-Staff:ADGroup) [Add-ADGroupMember], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,M 
+   icrosoft.ActiveDirectory.Management.Commands.AddADGroupMember"
+2026-06-15T17:12:46,BulkProvision,failure,INC0010011,bulk_provision.py,Laura.Mitchell,"User created but group assignment failed: Add-ADGroupMember : Cannot find an object with identity: 'Sales-Staff' under: 'DC=corp,DC=local'.
+At line:1 char:1
++ Add-ADGroupMember -Identity ""Sales-Staff"" -Members ""Laura.Mitchell""
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Sales-Staff:ADGroup) [Add-ADGroupMember], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,M 
+   icrosoft.ActiveDirectory.Management.Commands.AddADGroupMember"
+2026-06-15T17:12:48,BulkProvision,success,INC0010011,bulk_provision.py,Ahmed.Hassan,User created and group assigned
+2026-06-15T17:20:43,BulkProvision,failure,INC0010012,bulk_provision.py,James.Carter,"New-ADUser : The specified account already exists
+At line:2 char:5
++     New-ADUser `
++     ~~~~~~~~~~~~
+    + CategoryInfo          : ResourceExists: (CN=James Carter...C=corp,DC=local:String) [New-ADUser], ADIdentityAlrea 
+   dyExistsException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1316,Microsoft.ActiveDirectory.Management.Commands.NewADUser"
+2026-06-15T17:20:45,BulkProvision,success,INC0010012,bulk_provision.py,Priya.Sharma,User created and group assigned
+2026-06-15T17:20:47,BulkProvision,success,INC0010012,bulk_provision.py,Daniel.Okonkwo,User created and group assigned
+2026-06-15T17:20:48,BulkProvision,failure,INC0010012,bulk_provision.py,Laura.Mitchell,"New-ADUser : The specified account already exists
+At line:2 char:5
++     New-ADUser `
++     ~~~~~~~~~~~~
+    + CategoryInfo          : ResourceExists: (CN=Laura Mitche...C=corp,DC=local:String) [New-ADUser], ADIdentityAlrea 
+   dyExistsException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1316,Microsoft.ActiveDirectory.Management.Commands.NewADUser"
+2026-06-15T17:20:49,BulkProvision,failure,INC0010012,bulk_provision.py,Ahmed.Hassan,"New-ADUser : The specified account already exists
+At line:2 char:5
++     New-ADUser `
++     ~~~~~~~~~~~~
+    + CategoryInfo          : ResourceExists: (CN=Ahmed Hassan...C=corp,DC=local:String) [New-ADUser], ADIdentityAlrea 
+   dyExistsException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1316,Microsoft.ActiveDirectory.Management.Commands.NewADUser"
+2026-06-15T17:24:02,BulkProvision,success,INC0010013,bulk_provision.py,James.Carter,User created and group assigned
+2026-06-15T17:24:04,BulkProvision,success,INC0010013,bulk_provision.py,Priya.Sharma,User created and group assigned
+2026-06-15T17:24:06,BulkProvision,success,INC0010013,bulk_provision.py,Daniel.Okonkwo,User created and group assigned
+2026-06-15T17:24:07,BulkProvision,success,INC0010013,bulk_provision.py,Laura.Mitchell,User created and group assigned
+2026-06-15T17:24:09,BulkProvision,success,INC0010013,bulk_provision.py,Ahmed.Hassan,User created and group assigned
