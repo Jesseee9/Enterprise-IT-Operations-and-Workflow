@@ -1,5 +1,5 @@
+```markdown
 # IT Ops Training Lab
-
 A 14-day repeatable lab built to simulate working in an MSP environment. Every task follows a real workflow — not isolated exercises. Where Python can genuinely automate something, it does. Where it can't, the task is done manually and logged.
 
 Built and maintained by Jesse Adejoh as part of ongoing IT support skill development.
@@ -23,17 +23,17 @@ Built and maintained by Jesse Adejoh as part of ongoing IT support skill develop
 
 | File | Purpose |
 |---|---|
-| `scripts/logger.py` | Shared audit logging module — used by every script |
-| `scripts/servicenow_api.py` | Raises and resolves ServiceNow incidents via Table REST API |
-| `scripts/provision_user.py` | Day 1 — AD user provisioning via WinRM |
-| `scripts/connectivity_check.py` | Day 2 — Ping, nslookup, tracert, evidence saving, health log |
-| `LOGGING.md` | Full schema and rules for IT_Audit_Log.csv and health_checks.csv |
-| `.gitignore` | Excludes .env and credentials from version control |
-| `logs/evidence/` | Stores raw output from connectivity and health checks |
-| `scripts/auto_unlock.py` | Day 6 — AD lockout detection and unlock via WinRM |
-| `scripts/bulk_provision.py` | Day 7 — Bulk AD user provisioning from CSV |
-| `csv-inputs/new_starters.csv` | Day 7 — Sample bulk provisioning input file |
-| `.github/workflows/audit_summary.yml` | CI — Audit log summary posted on every push to main |
+| scripts/logger.py | Shared audit logging module — used by every script |
+| scripts/servicenow_api.py | Raises and resolves ServiceNow incidents via Table REST API |
+| scripts/provision_user.py | Day 1 — AD user provisioning via WinRM |
+| scripts/connectivity_check.py | Day 2 — Ping, nslookup, tracert, evidence saving, health log |
+| LOGGING.md | Full schema and rules for IT_Audit_Log.csv and health_checks.csv |
+| .gitignore | Excludes .env and credentials from version control |
+| logs/evidence/ | Stores raw output from connectivity and health checks |
+| scripts/auto_unlock.py | Day 6 — AD lockout detection and unlock via WinRM |
+| scripts/bulk_provision.py | Day 7 — Bulk AD user provisioning from CSV |
+| csv-inputs/new_starters.csv | Day 7 — Sample bulk provisioning input file |
+| .github/workflows/audit_summary.yml | CI — Audit log summary posted on every push to main |
 
 Task scripts are written on the day each workflow is completed and pushed to GitHub immediately after.
 
@@ -46,35 +46,7 @@ Task scripts are written on the day each workflow is completed and pushed to Git
 | Warm-up | 10 min | Check VMs are running. Confirm Windows Server is reachable. Log into ServiceNow PDI. |
 | Main Task | 60–90 min | Follow the day's workflow. Every action is deliberate — treat it as a real support ticket. |
 | Logging | 5–10 min | Confirm the log row appears in the relevant CSV. Automated tasks log themselves. Manual tasks use the logger script. |
-| Push | 5 min | `git add . && git commit -m "Day X complete — [task name]" && git push` |
-
----
-
-## ServiceNow API Integration
-
-Automated tasks use `scripts/servicenow_api.py` to manage the full incident lifecycle via the ServiceNow Table REST API:
-
-- **Open** — POST request raises the incident, captures the INC number and sys_id
-- **Resolve** — PATCH request closes the incident with resolution notes and state set to Resolved
-
-The INC number is passed directly to the audit logger — no manual ticket entry needed.
-
-```
-INSTANCE = "dev268884"
-URL = f"https://{INSTANCE}.service-now.com/api/now/table/incident"
-```
-
-Credentials are loaded from a `.env` file — never hardcoded.
-
-```
-SN_INSTANCE=dev268884
-SN_USER=admin
-SN_PASSWORD=your_pdi_password
-SERVER_IP=192.168.10.50
-DOMAIN=corp.local
-ADMIN_USER=Administrator
-ADMIN_PASS=your_server_password
-```
+| Push | 5 min | git add . && git commit -m "Day X complete — [task name]" && git push |
 
 ---
 
@@ -82,23 +54,20 @@ ADMIN_PASS=your_server_password
 
 ### Week 1 — Core IT Support Workflows
 
----
+#### Day 1: New Starter Provisioning
+Scenario: A new employee joins. Their AD account needs creating, assigned to the correct group, and a ServiceNow incident raised and resolved — all from a single command.
 
-### Day 1: New Starter Provisioning
-**Scenario:** A new employee joins. Their AD account needs creating, assigned to the correct group, and a ServiceNow incident raised and resolved — all from a single command.
-
-**Workflow:**
-
+Workflow:
 1. Open terminal in the project folder
 2. Run the provisioning script:
 ```
 python scripts/provision_user.py --first Sarah --last Blake --dept Sales --group Sales --password Welcome1!
 ```
-3. The script connects to Windows Server via WinRM, creates the user in corp.local, adds them to the Sales group, raises a ServiceNow incident, captures the INC number, logs the full action to `IT_Audit_Log.csv`, and resolves the incident
+3. The script connects to Windows Server via WinRM, creates the user in corp.local, adds them to the Sales group, raises a ServiceNow incident, captures the INC number, logs the full action to IT_Audit_Log.csv, and resolves the incident
 4. Open Active Directory Users and Computers — confirm Sarah.Blake exists in the Users container
 5. Check her Member Of tab — confirm she is in the Sales group
 6. Open ServiceNow PDI — confirm the incident shows as Resolved with the correct INC number
-7. Open `logs/IT_Audit_Log.csv` — confirm the row is there with the INC number populated
+7. Open logs/IT_Audit_Log.csv — confirm the row is there with the INC number populated
 8. Push to GitHub
 
 **What Python automates:** AD user creation via WinRM, group assignment, ServiceNow incident open and resolve, INC capture, audit logging
@@ -107,21 +76,20 @@ python scripts/provision_user.py --first Sarah --last Blake --dept Sales --group
 
 ---
 
-### Day 2: Connectivity Troubleshooting
-**Scenario:** A user reports they cannot reach a network resource. Run diagnostics, save evidence, document the outcome, and close the ticket.
+#### Day 2: Connectivity Troubleshooting
+Scenario: A user reports they cannot reach a network resource. Run diagnostics, save evidence, document the outcome, and close the ticket.
 
-**Workflow:**
-
+Workflow:
 1. Run the connectivity check script:
 ```
 python scripts/connectivity_check.py --target 192.168.10.50
 ```
-2. The script runs ping, nslookup, and tracert — saves raw output to `logs/evidence/`
+2. The script runs ping, nslookup, and tracert — saves raw output to logs/evidence/
 3. Review the saved output — note whether the target was reachable and what DNS returned
-4. If ping failed, open VMware Workstation and confirm both VMs are on Host-only adapter (VMnet1). Re-run the script after fixing
-5. The script raises a ServiceNow incident automatically, logs a row to `logs/health_checks.csv` with the INC number, and resolves the incident with a summary
+4. If ping failed, open VMware Workstation and confirm both VMs are on Host-only adapter (VMnet2). Re-run the script after fixing
+5. The script raises a ServiceNow incident automatically, logs a row to logs/health_checks.csv with the INC number, and resolves the incident with a summary
 6. Open ServiceNow PDI — confirm the incident shows as Resolved
-7. Open `logs/health_checks.csv` — confirm the row is there with the correct status and INC number
+7. Open logs/health_checks.csv — confirm the row is there with the correct status and INC number
 8. Push to GitHub
 
 **What Python automates:** Ping, nslookup, tracert, evidence saving, ServiceNow incident open and resolve, health check logging
@@ -130,17 +98,16 @@ python scripts/connectivity_check.py --target 192.168.10.50
 
 ---
 
-### Day 3: Group Membership and Role-Based Access
-**Scenario:** A user's role has changed. Update their group membership in Active Directory, verify the change with PowerShell, and log it.
+#### Day 3: Group Membership and Role-Based Access
+Scenario: A user's role has changed. Update their group membership in Active Directory, verify the change with PowerShell, and log it.
 
-**Workflow:**
-
+Workflow:
 1. Open Active Directory Users and Computers on Windows Server 2022
 2. Find Sarah.Blake — right click > Properties > Member Of
 3. Remove her from the Sales group
 4. Click Add — type IT-Staff, click Check Names, click OK. Click Apply and OK
 5. Open PowerShell on the server and verify:
-```powershell
+```
 Get-ADUser -Identity sarah.blake -Properties MemberOf | Select-Object MemberOf
 ```
 6. Confirm IT-Staff appears in the output and Sales is removed
@@ -161,11 +128,10 @@ python scripts/logger.py --action GroupUpdate --status success --ticket [INC num
 
 ---
 
-### Day 4: DNS and DHCP Verification
-**Scenario:** A device is not resolving hostnames or receiving an IP. Verify DNS and DHCP are correctly configured on the server.
+#### Day 4: DNS and DHCP Verification
+Scenario: A device is not resolving hostnames or receiving an IP. Verify DNS and DHCP are correctly configured on the server.
 
-**Workflow:**
-
+Workflow:
 1. Open DNS Manager on Windows Server 2022 — Server Manager > Tools > DNS
 2. Expand the server > Forward Lookup Zones > corp.local
 3. Check that an A record exists for DESKTOP-QL161MH pointing to 192.168.10.60. If missing — right click the zone > New Host (A) — enter the name and IP
@@ -194,17 +160,16 @@ python scripts/logger.py --action DNSDHCPCheck --status success --ticket [INC nu
 
 ---
 
-### Day 5: Entra ID User Lifecycle via Graph API
-**Scenario:** A new contractor needs a cloud identity created and verified. Python handles the full workflow via Microsoft Graph API — no portal required.
+#### Day 5: Entra ID User Lifecycle via Graph API
+Scenario: A new contractor needs a cloud identity created and verified. Python handles the full workflow via Microsoft Graph API — no portal required.
 
-**Workflow:**
-
+Workflow:
 1. Run the Entra ID provisioning script:
 ```
 python scripts/entra_provision.py --display "Test Contractor" --upn testcontractor@yourdomain.onmicrosoft.com --password TempPass1!
 ```
-2. The script authenticates to Graph API, creates the user in Entra ID, raises a ServiceNow incident, logs the action to `IT_Audit_Log.csv`, and resolves the incident
-3. Open Azure Portal > Entra ID > Users — confirm the account exists and shows as active
+2. The script authenticates to Graph API, creates the user in Entra ID, raises a ServiceNow incident, logs the action to IT_Audit_Log.csv, and resolves the incident
+3. Open Entra ID > Users — confirm the account exists and shows as active
 4. Run the lookup script to verify:
 ```
 python scripts/entra_lookup.py --upn testcontractor@yourdomain.onmicrosoft.com
@@ -219,11 +184,10 @@ python scripts/entra_lookup.py --upn testcontractor@yourdomain.onmicrosoft.com
 
 ---
 
-### Day 6: Account Lockout Investigation
-**Scenario:** A user is locked out. Investigate the cause in Event Viewer, unlock the account via Python, and document it.
+#### Day 6: Account Lockout Investigation
+Scenario: A user is locked out. Investigate the cause in Event Viewer, unlock the account via Python, and document it.
 
-**Workflow:**
-
+Workflow:
 1. Open Event Viewer on Windows Server 2022 — Windows Logs > Security
 2. Filter by Event ID 4625 — note the account name, failure reason, and source workstation
 3. Run the auto unlock script:
@@ -232,12 +196,12 @@ python scripts/auto_unlock.py
 ```
 4. The script queries AD for all locked accounts, unlocks each one, raises a ServiceNow incident, logs every action, and resolves the incident
 5. Open PowerShell and verify:
-```powershell
+```
 Search-ADAccount -LockedOut | Select-Object Name, LockedOut
 ```
 6. Confirm the output is empty
 7. Open ServiceNow PDI — confirm the incident shows as Resolved
-8. Open `logs/IT_Audit_Log.csv` — confirm the row is there
+8. Open logs/IT_Audit_Log.csv — confirm the row is there
 9. Push to GitHub
 
 **What Python automates:** AD lockout query, account unlock, ServiceNow incident open and resolve, logging
@@ -246,12 +210,11 @@ Search-ADAccount -LockedOut | Select-Object Name, LockedOut
 
 ---
 
-### Day 7: Bulk User Provisioning from CSV
-**Scenario:** Five new starters join on the same day. A Python script reads a CSV and creates all accounts automatically.
+#### Day 7: Bulk User Provisioning from CSV
+Scenario: Five new starters join on the same day. A Python script reads a CSV and creates all accounts automatically.
 
-**Workflow:**
-
-1. Create `csv-inputs/new_starters.csv` with columns: FirstName, LastName, Department, Group, Password
+Workflow:
+1. Create csv-inputs/new_starters.csv with columns: FirstName, LastName, Department, Group, Password
 2. Add five realistic entries
 3. Run the bulk provisioning script:
 ```
@@ -260,7 +223,7 @@ python scripts/bulk_provision.py --csv csv-inputs/new_starters.csv
 4. The script reads each row, creates the AD user via WinRM, logs a row per user, raises one ServiceNow incident covering the batch, and resolves it
 5. Open Active Directory Users and Computers — confirm all five users exist
 6. Open ServiceNow PDI — confirm the incident shows as Resolved
-7. Open `logs/IT_Audit_Log.csv` — confirm five rows were logged
+7. Open logs/IT_Audit_Log.csv — confirm five rows were logged
 8. Push the CSV, script, and updated log to GitHub
 
 **What Python automates:** CSV parsing, AD user creation for all rows, per-user logging, ServiceNow incident open and resolve, error handling for invalid rows
@@ -271,13 +234,10 @@ python scripts/bulk_provision.py --csv csv-inputs/new_starters.csv
 
 ### Week 2 — Advanced Workflows
 
----
+#### Day 8: Firewall Rule Check and Remediation
+Scenario: A service becomes unreachable. A firewall rule is suspected. Manually test, fix, verify, and document.
 
-### Day 8: Firewall Rule Check and Remediation
-**Scenario:** A service becomes unreachable. A firewall rule is suspected. Manually test, fix, verify, and document.
-
-**Workflow:**
-
+Workflow:
 1. Open ServiceNow PDI — raise an Incident manually:
    - Category: Network
    - Short description: Firewall rule verified and restored — [date]
@@ -285,11 +245,14 @@ python scripts/bulk_provision.py --csv csv-inputs/new_starters.csv
 2. Open Windows Firewall with Advanced Security on Windows Server 2022
 3. Go to Inbound Rules — find the rule for WinRM (port 5985)
 4. Disable the rule deliberately — right click > Disable Rule
-5. From the Windows 11 VM, attempt a WinRM connection — confirm it fails
+5. From the Windows 11 VM, attempt a WinRM connection — confirm it fails:
+```
+Test-WSMan -ComputerName 192.168.10.50
+```
 6. Go back to Windows Server — re-enable the rule
 7. Retry the connection from Windows 11 VM — confirm it works
 8. Open PowerShell and verify:
-```powershell
+```
 Get-NetFirewallRule | Where-Object { $_.Enabled -eq 'True' } | Select-Object DisplayName, Direction, Action | Format-Table
 ```
 9. Run the logger with the INC number from step 1:
@@ -305,11 +268,10 @@ python scripts/logger.py --action FirewallCheck --status success --ticket [INC n
 
 ---
 
-### Day 9: Offboarding Workflow
-**Scenario:** An employee is leaving. Account disabled, groups cleared, account moved to Disabled Users OU — Python handles the full AD workflow.
+#### Day 9: Offboarding Workflow
+Scenario: An employee is leaving. Account disabled, groups cleared, account moved to Disabled Users OU — Python handles the full AD workflow.
 
-**Workflow:**
-
+Workflow:
 1. Run the offboarding script:
 ```
 python scripts/offboard_user.py --username sarah.blake
@@ -320,11 +282,11 @@ python scripts/offboard_user.py --username sarah.blake
    - Member Of tab is empty
    - Account is in the Disabled Users OU
 4. Open PowerShell and verify:
-```powershell
+```
 Get-ADUser -Identity sarah.blake -Properties Enabled, MemberOf
 ```
 5. Confirm Enabled = False and MemberOf is empty
-6. Open Azure Portal > Entra ID > Users — confirm the account shows as blocked from sign-in
+6. Open Entra ID > Users — confirm the account shows as blocked from sign-in
 7. Open ServiceNow PDI — confirm the incident shows as Resolved
 8. Push to GitHub
 
@@ -334,21 +296,20 @@ Get-ADUser -Identity sarah.blake -Properties Enabled, MemberOf
 
 ---
 
-### Day 10: PowerShell Log Analysis
-**Scenario:** Review system health by exporting Windows Event Logs with PowerShell and analysing them with Python to produce a summary.
+#### Day 10: PowerShell Log Analysis
+Scenario: Review system health by exporting Windows Event Logs with PowerShell and analysing them with Python to produce a summary.
 
-**Workflow:**
-
+Workflow:
 1. Open PowerShell on Windows Server 2022 and export the last 20 system errors:
-```powershell
+```
 Get-EventLog -LogName System -EntryType Error -Newest 20 | Select-Object TimeGenerated, Source, Message | Export-Csv -Path C:\logs\system_errors.csv -NoTypeInformation
 ```
-2. Copy `system_errors.csv` to your local project folder under `logs/`
+2. Copy system_errors.csv to your local project folder under logs/
 3. Run the log analyser:
 ```
 python scripts/log_analyser.py --input logs/system_errors.csv
 ```
-4. The script counts total errors, identifies the top 3 sources, prints the most recent error, saves a summary to `logs/health_checks.csv`, raises a ServiceNow incident, and resolves it
+4. The script counts total errors, identifies the top 3 sources, prints the most recent error, saves a summary to logs/health_checks.csv, raises a ServiceNow incident, and resolves it
 5. Review the output — note any recurring sources worth investigating
 6. Open ServiceNow PDI — confirm the incident shows as Resolved
 7. Push everything to GitHub
@@ -359,11 +320,10 @@ python scripts/log_analyser.py --input logs/system_errors.csv
 
 ---
 
-### Day 11: Linux SSH and System Health Check
-**Scenario:** A Linux server needs a routine health check. SSH in, check services, review disk and logs, and create a test user.
+#### Day 11: Linux SSH and System Health Check
+Scenario: A Linux server needs a routine health check. SSH in, check services, review disk and logs, and create a test user.
 
-**Workflow:**
-
+Workflow:
 1. Boot your Ubuntu Linux VM in VMware Workstation
 2. Note the IP — run `ip a` and find the inet address
 3. From the Windows 11 VM, SSH in:
@@ -400,16 +360,15 @@ python scripts/logger.py --action LinuxHealthCheck --status success --ticket [IN
 
 ---
 
-### Day 12: DNS Health Check and Public Record Audit
-**Scenario:** A client reports intermittent connectivity issues. Run a full external DNS audit to rule out misconfiguration — Python automates the checks and saves all evidence.
+#### Day 12: DNS Health Check and Public Record Audit
+Scenario: A client reports intermittent connectivity issues. Run a full external DNS audit to rule out misconfiguration — Python automates the checks and saves all evidence.
 
-**Workflow:**
-
+Workflow:
 1. Run the DNS audit script against a target domain:
 ```
 python scripts/dns_audit.py --domain yourdomain.com
 ```
-2. The script runs nslookup for A, MX, and PTR records, checks whether the domain resolves correctly, saves all output to `logs/evidence/`, raises a ServiceNow incident, logs the result to `logs/health_checks.csv`, and resolves the incident
+2. The script runs nslookup for A, MX, and PTR records, checks whether the domain resolves correctly, saves all output to logs/evidence/, raises a ServiceNow incident, logs the result to logs/health_checks.csv, and resolves the incident
 3. Review the saved evidence — note any missing or misconfigured records
 4. Cross-reference against expected values — confirm MX records point to the correct mail server and A record resolves to the correct IP
 5. Open ServiceNow PDI — confirm the incident shows as Resolved with findings in the resolution notes
@@ -421,12 +380,11 @@ python scripts/dns_audit.py --domain yourdomain.com
 
 ---
 
-### Day 13: Python Script Hardening
-**Scenario:** The scripts built across the lab work but are not production ready. Add proper error handling, input validation, and secrets management.
+#### Day 13: Python Script Hardening
+Scenario: The scripts built across the lab work but are not production ready. Add proper error handling, input validation, and secrets management.
 
-**Workflow:**
-
-1. Open `scripts/provision_user.py`
+Workflow:
+1. Open scripts/provision_user.py
 2. Wrap the main logic in a try/except block:
 ```python
 try:
@@ -436,7 +394,7 @@ except Exception as e:
     print(f"[ERROR] {e}")
 ```
 3. Add input validation — if any required field is empty, raise a ValueError with a clear message
-4. Confirm `.env` exists in the project root with all credentials. Confirm `.env` is in `.gitignore`
+4. Confirm .env exists in the project root with all credentials. Confirm .env is in .gitignore
 5. Confirm every script loads credentials via dotenv:
 ```python
 from dotenv import load_dotenv
@@ -444,9 +402,9 @@ import os
 load_dotenv()
 server_ip = os.getenv("SERVER_IP")
 ```
-6. Retest each hardened script — confirm it still works with values loading from `.env`
+6. Retest each hardened script — confirm it still works with values loading from .env
 7. Run a deliberate failure — pass an empty field — confirm the script catches it and logs a failure row rather than crashing
-8. Push hardened scripts to GitHub — confirm `.env` does not appear in the commit
+8. Push hardened scripts to GitHub — confirm .env does not appear in the commit
 
 **What Python does:** This entire day is Python focused
 
@@ -454,22 +412,22 @@ server_ip = os.getenv("SERVER_IP")
 
 ---
 
-### Day 14: Shift Simulation
-**Scenario:** You are covering a support shift. Work through five tickets in order. Each one must be fully resolved and closed in ServiceNow before moving to the next. Log everything.
+#### Day 14: Shift Simulation
+Scenario: You are covering a support shift. Work through five tickets in order. Each one must be fully resolved and closed in ServiceNow before moving to the next. Log everything.
 
-**Ticket Queue:**
+Ticket Queue:
 
 | # | Type | Task |
 |---|---|---|
 | 1 | New starter | Create AD account for James.Okafor, department = Finance, assign to Finance group |
 | 2 | Locked account | Sarah.Blake is locked out — check Event Viewer for Event ID 4625, run auto_unlock.py, verify with PowerShell |
-| 3 | Connectivity | A user cannot reach the server — run connectivity_check.py against 192.168.169.10, review the evidence file, document findings |
+| 3 | Connectivity | A user cannot reach the server — run connectivity_check.py against 192.168.10.50, review the evidence file, document findings |
 | 4 | Offboarding | A contractor's account needs disabling — run offboard_user.py, verify in AD and Entra ID, confirm groups are cleared |
 | 5 | Health check | Export system errors with PowerShell, run log_analyser.py, confirm no critical unresolved errors |
 
-**Rules:**
+Rules:
 - Raise a real ServiceNow Incident for each ticket
-- Log every action to `IT_Audit_Log.csv`
+- Log every action to IT_Audit_Log.csv
 - Resolve the ServiceNow ticket before moving to the next one
 - Push everything to GitHub at the end with a single commit
 
@@ -478,7 +436,6 @@ server_ip = os.getenv("SERVER_IP")
 ---
 
 ## Looping the Lab
-
 After Day 14, restart at Day 1 with harder constraints:
 
 | Loop | Constraint |
@@ -512,5 +469,5 @@ After Day 14, restart at Day 1 with harder constraints:
 ---
 
 ## Audit Trail
-
-Every task produces a log row in `logs/IT_Audit_Log.csv` using `scripts/logger.py`. Automated tasks capture the ServiceNow INC number directly from the API response and resolve the incident upon completion. Manual tasks use the logger script from the terminal with the INC number noted from the PDI. See `LOGGING.md` for the full schema and rules.
+Every task produces a log row in logs/IT_Audit_Log.csv using scripts/logger.py. Automated tasks capture the ServiceNow INC number directly from the API response and resolve the incident upon completion. Manual tasks use the logger script from the terminal with the INC number noted from the PDI. See LOGGING.md for the full schema and rules.
+```
