@@ -1,4 +1,4 @@
-```markdown
+
 # IT Ops Training Lab
 A 14-day repeatable lab built to simulate working in an MSP environment. Every task follows a real workflow — not isolated exercises. Where Python can genuinely automate something, it does. Where it can't, the task is done manually and logged.
 
