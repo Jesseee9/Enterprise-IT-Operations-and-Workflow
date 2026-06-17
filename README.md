@@ -10,7 +10,7 @@ Built and maintained by Jesse Adejoh as part of ongoing IT support skill develop
 
 | Component | Details |
 |---|---|
-| Windows Server 2022 | 192.168.169.10 (host-reachable) / 192.168.10.10 (internal) — corp.local domain |
+| Windows Server 2022 | 192.168.10.50 — corp.local domain |
 | Windows 11 VM | 192.168.10.60 — DESKTOP-QL161MH |
 | Ubuntu Linux VM | IP confirmed at task time |
 | ServiceNow PDI | dev268884 |
@@ -30,6 +30,10 @@ Built and maintained by Jesse Adejoh as part of ongoing IT support skill develop
 | `LOGGING.md` | Full schema and rules for IT_Audit_Log.csv and health_checks.csv |
 | `.gitignore` | Excludes .env and credentials from version control |
 | `logs/evidence/` | Stores raw output from connectivity and health checks |
+| `scripts/auto_unlock.py` | Day 6 — AD lockout detection and unlock via WinRM |
+| `scripts/bulk_provision.py` | Day 7 — Bulk AD user provisioning from CSV |
+| `csv-inputs/new_starters.csv` | Day 7 — Sample bulk provisioning input file |
+| `.github/workflows/audit_summary.yml` | CI — Audit log summary posted on every push to main |
 
 Task scripts are written on the day each workflow is completed and pushed to GitHub immediately after.
 
@@ -66,7 +70,7 @@ Credentials are loaded from a `.env` file — never hardcoded.
 SN_INSTANCE=dev268884
 SN_USER=admin
 SN_PASSWORD=your_pdi_password
-SERVER_IP=192.168.169.10
+SERVER_IP=192.168.10.50
 DOMAIN=corp.local
 ADMIN_USER=Administrator
 ADMIN_PASS=your_server_password
@@ -110,7 +114,7 @@ python scripts/provision_user.py --first Sarah --last Blake --dept Sales --group
 
 1. Run the connectivity check script:
 ```
-python scripts/connectivity_check.py --target 192.168.169.10
+python scripts/connectivity_check.py --target 192.168.10.50
 ```
 2. The script runs ping, nslookup, and tracert — saves raw output to `logs/evidence/`
 3. Review the saved output — note whether the target was reachable and what DNS returned
@@ -274,21 +278,21 @@ python scripts/bulk_provision.py --csv csv-inputs/new_starters.csv
 
 **Workflow:**
 
-1. Open Windows Firewall with Advanced Security on Windows Server 2022
-2. Go to Inbound Rules — find the rule for WinRM (port 5985)
-3. Disable the rule deliberately — right click > Disable Rule
-4. From the Windows 11 VM, attempt a WinRM connection — confirm it fails
-5. Go back to Windows Server — re-enable the rule
-6. Retry the connection from Windows 11 VM — confirm it works
-7. Open PowerShell and verify:
-```powershell
-Get-NetFirewallRule | Where-Object { $_.Enabled -eq 'True' } | Select-Object DisplayName, Direction, Action | Format-Table
-```
-8. Open ServiceNow PDI — raise an Incident manually:
+1. Open ServiceNow PDI — raise an Incident manually:
    - Category: Network
    - Short description: Firewall rule verified and restored — [date]
    - Note the INC number
-9. Run the logger with the INC number from step 8:
+2. Open Windows Firewall with Advanced Security on Windows Server 2022
+3. Go to Inbound Rules — find the rule for WinRM (port 5985)
+4. Disable the rule deliberately — right click > Disable Rule
+5. From the Windows 11 VM, attempt a WinRM connection — confirm it fails
+6. Go back to Windows Server — re-enable the rule
+7. Retry the connection from Windows 11 VM — confirm it works
+8. Open PowerShell and verify:
+```powershell
+Get-NetFirewallRule | Where-Object { $_.Enabled -eq 'True' } | Select-Object DisplayName, Direction, Action | Format-Table
+```
+9. Run the logger with the INC number from step 1:
 ```
 python scripts/logger.py --action FirewallCheck --status success --ticket [INC number] --actor Manual --target WindowsServer2022
 ```
@@ -503,7 +507,7 @@ After Day 14, restart at Day 1 with harder constraints:
 
 **Python** — WinRM Integration, Graph API Calls, REST API Calls, CSV Handling, Error Handling, Input Validation, dotenv Secrets Management, Subprocess, Modular Scripting, Audit Logging Automation
 
-**GitHub** — Git Add / Commit / Push, Repository Structure, gitignore Configuration, Version Control as Audit Trail
+**GitHub** — Git Add / Commit / Push, Repository Structure, gitignore Configuration, Version Control as Audit Trail, GitHub Actions, CI/CD Workflow Automation, Audit Reporting
 
 ---
 
