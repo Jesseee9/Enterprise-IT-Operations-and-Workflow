@@ -81,3 +81,4 @@ At line:2 char:5
 2026-06-15T17:24:07,BulkProvision,success,INC0010013,bulk_provision.py,Laura.Mitchell,User created and group assigned
 2026-06-15T17:24:09,BulkProvision,success,INC0010013,bulk_provision.py,Ahmed.Hassan,User created and group assigned
 2026-06-17T14:27:34,FirewallCheck,success,INC0010014,Manual,WindowsServer2022,
+2026-06-18T13:53:43,OffboardUser,success,INC0010015,offboard_user.py,sarah.blake,"Account disabled, groups removed, moved to Disabled Users OU"

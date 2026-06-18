@@ -1,4 +1,3 @@
-
 # IT Ops Training Lab
 A 14-day repeatable lab built to simulate working in an MSP environment. Every task follows a real workflow — not isolated exercises. Where Python can genuinely automate something, it does. Where it can't, the task is done manually and logged.
 
@@ -470,4 +469,3 @@ After Day 14, restart at Day 1 with harder constraints:
 
 ## Audit Trail
 Every task produces a log row in logs/IT_Audit_Log.csv using scripts/logger.py. Automated tasks capture the ServiceNow INC number directly from the API response and resolve the incident upon completion. Manual tasks use the logger script from the terminal with the INC number noted from the PDI. See LOGGING.md for the full schema and rules.
-```
