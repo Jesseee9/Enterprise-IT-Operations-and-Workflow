@@ -4,4 +4,4 @@ timestamp,target,ping_result,dns_result,tracert_saved,overall_status,notes
 2026-06-02T13:25:31,192.168.10.10,unreachable,unresolved,logs/evidence\20260602_132650_192-168-10-10_tracert.txt,unreachable,ping failed; dns unresolved
 2026-06-02T13:29:36,192.168.10.10,unreachable,unresolved,logs/evidence\20260602_133055_192-168-10-10_tracert.txt,unreachable,ping failed; dns unresolved
 2026-06-02T13:31:44,192.168.10.10,unreachable,unresolved,logs/evidence\20260602_133303_192-168-10-10_tracert.txt,unreachable,ping failed; dns unresolved
-2026-06-02T13:44:04,192.168.169.10,reachable,unresolved,logs/evidence\20260602_134407_192-168-169-10_tracert.txt,degraded,degraded; INC0010002
+2026-06-02T13:44:04,192.168.169.10,reachable,unresolved,logs/evidence\20260602_134407_192-168-169-10_tracert.txt,degraded,degraded; INC00100022026-06-20T11:36:32.682347,LogAnalysis,success,INC0010016,Total errors: 4. Top sources: EventLog:4.
