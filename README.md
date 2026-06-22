@@ -1,7 +1,7 @@
-# IT Ops Training Lab
-A 14-day repeatable lab built to simulate working in an MSP environment. Every task follows a real workflow — not isolated exercises. Where Python can genuinely automate something, it does. Where it can't, the task is done manually and logged.
+# Enterprise IT Operations and Workflow
+A fully automated IT operations environment simulating real MSP workflows across Active Directory, ServiceNow, Microsoft Entra ID, and cloud infrastructure. Every workflow follows real support ticket discipline — where Python can genuinely automate something, it does. Where it can't, the task is done manually and logged.
 
-Built and maintained by Jesse Adejoh as part of ongoing IT support skill development.
+Built and maintained by Jesse Adejoh.
 
 ---
 
