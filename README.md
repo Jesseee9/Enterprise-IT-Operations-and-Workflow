@@ -5,6 +5,25 @@ Built and maintained by Jesse Adejoh.
 
 ---
 
+## Architecture
+
+```mermaid
+flowchart TD
+    A[User Action / Trigger] --> B[Python Script]
+    B --> C[WinRM Session]
+    C --> D[Windows Server 2022\ncorp.local — 192.168.10.50]
+    D --> E[Active Directory\nUser Provisioning / Lockout / Offboarding]
+    B --> F[ServiceNow REST API]
+    F --> G[Incident Lifecycle\nRaise → Update → Resolve]
+    B --> H[Microsoft Graph API]
+    H --> I[Microsoft Entra ID\nCloud Identity Management]
+    B --> J[IT_Audit_Log.csv\nAudit Trail]
+    J --> K[GitHub Actions\nCI — Audit Summary on every push]
+    B --> L[health_checks.csv\nConnectivity and Log Analysis Results]
+```
+
+---
+
 ## Environment
 
 | Component | Details |
