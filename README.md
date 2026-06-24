@@ -53,19 +53,19 @@ flowchart TD
 |---|---|
 | .github/workflows/audit_summary.yml | CI — Audit log summary posted on every push to main |
 | .gitignore | Excludes .env and credentials from version control |
-| csv-inputs/new_starters.csv | Day 7 — Sample bulk provisioning input file |
+| csv-inputs/new_starters.csv | Sample bulk provisioning input file |
 | LOGGING.md | Full schema and rules for IT_Audit_Log.csv and health_checks.csv |
 | logs/evidence/ | Stores raw output from connectivity and health checks |
-| scripts/auto_unlock.py | Day 6 — AD lockout detection and unlock via WinRM |
-| scripts/bulk_provision.py | Day 7 — Bulk AD user provisioning from CSV |
-| scripts/connectivity_check.py | Day 2 — Ping, nslookup, tracert, evidence saving, health log |
-| scripts/dns_audit.py | Day 9 — Automates external DNS record lookup (A, MX, PTR) and captures evidence |
-| scripts/entra_lookup.py | Day 8 — Queries Entra ID via Graph API to verify live user statuses and assigned licensing |
-| scripts/entra_provision.py | Day 8 — Provisions contractor identities directly into cloud-native Entra ID using Graph API |
-| scripts/log_analyser.py | Day 10 — Parses exported Windows Server event log CSVs via Python to isolate system errors |
+| scripts/auto_unlock.py | AD lockout detection and unlock via WinRM |
+| scripts/bulk_provision.py | Bulk AD user provisioning from CSV |
+| scripts/connectivity_check.py | Ping, nslookup, tracert, evidence saving, health log |
+| scripts/dns_audit.py | Automates external DNS record lookup (A, MX, PTR) and captures evidence |
+| scripts/entra_lookup.py | Queries Entra ID via Graph API to verify live user statuses and assigned licensing |
+| scripts/entra_provision.py | Provisions contractor identities directly into cloud-native Entra ID using Graph API |
+| scripts/log_analyser.py | Parses exported Windows Server event log CSVs via Python to isolate system errors |
 | scripts/logger.py | Shared audit logging module — used by every script |
-| scripts/offboard_user.py | Day 5 — Disables AD account, strips group memberships, moves to Disabled Users OU, and updates cloud identity |
-| scripts/provision_user.py | Day 1 — AD user provisioning via WinRM |
+| scripts/offboard_user.py | Disables AD account, strips group memberships, moves to Disabled Users OU, and updates cloud identity |
+| scripts/provision_user.py | AD user provisioning via WinRM |
 | scripts/servicenow_api.py | Raises and resolves ServiceNow incidents via Table REST API |
 
 Task scripts are written on the day each workflow is completed and pushed to GitHub immediately after.
