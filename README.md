@@ -3,6 +3,8 @@ A fully automated IT operations environment simulating real MSP workflows across
 
 Built and maintained by Jesse Adejoh.
 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=for-the-badge&logo=powershell&logoColor=white) ![Windows Server](https://img.shields.io/badge/Windows%20Server-0078D6?style=for-the-badge&logo=windows&logoColor=white) ![ServiceNow](https://img.shields.io/badge/ServiceNow-293E40?style=for-the-badge&logo=servicenow&logoColor=29B6F6) ![Microsoft Entra](https://img.shields.io/badge/Microsoft%20Entra-0078D4?style=for-the-badge&logo=microsoft&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white) ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black) ![VMware](https://img.shields.io/badge/VMware-607078?style=for-the-badge&logo=vmware&logoColor=white)
+
 ---
 
 ## Architecture
@@ -24,6 +26,14 @@ flowchart TD
 
 ---
 
+## Key Outcomes
+*   **Production-Ready IT Automation:** Replaced repetitive tier-1 helpdesk tasks with robust Python scripts utilizing WinRM and Microsoft Graph API.
+*   **ITSM Alignment:** Integrated every automated script directly with the ServiceNow REST API to enforce enterprise ticket compliance automatically.
+*   **Hardened Environments:** Implemented strict input validation, centralized `.env` secret token management, and structured error handling to prevent script failures from polluting live logs.
+*   **Continuous Audit Control:** Engineered a live CI pipeline via GitHub Actions that automatically generates and posts data-driven audit summaries on every code push.
+
+---
+
 ## Environment
 
 | Component | Details |
@@ -41,17 +51,22 @@ flowchart TD
 
 | File | Purpose |
 |---|---|
-| scripts/logger.py | Shared audit logging module — used by every script |
-| scripts/servicenow_api.py | Raises and resolves ServiceNow incidents via Table REST API |
-| scripts/provision_user.py | Day 1 — AD user provisioning via WinRM |
-| scripts/connectivity_check.py | Day 2 — Ping, nslookup, tracert, evidence saving, health log |
-| LOGGING.md | Full schema and rules for IT_Audit_Log.csv and health_checks.csv |
+| .github/workflows/audit_summary.yml | CI — Audit log summary posted on every push to main |
 | .gitignore | Excludes .env and credentials from version control |
+| csv-inputs/new_starters.csv | Day 7 — Sample bulk provisioning input file |
+| LOGGING.md | Full schema and rules for IT_Audit_Log.csv and health_checks.csv |
 | logs/evidence/ | Stores raw output from connectivity and health checks |
 | scripts/auto_unlock.py | Day 6 — AD lockout detection and unlock via WinRM |
 | scripts/bulk_provision.py | Day 7 — Bulk AD user provisioning from CSV |
-| csv-inputs/new_starters.csv | Day 7 — Sample bulk provisioning input file |
-| .github/workflows/audit_summary.yml | CI — Audit log summary posted on every push to main |
+| scripts/connectivity_check.py | Day 2 — Ping, nslookup, tracert, evidence saving, health log |
+| scripts/dns_audit.py | Day 9 — Automates external DNS record lookup (A, MX, PTR) and captures evidence |
+| scripts/entra_lookup.py | Day 8 — Queries Entra ID via Graph API to verify live user statuses and assigned licensing |
+| scripts/entra_provision.py | Day 8 — Provisions contractor identities directly into cloud-native Entra ID using Graph API |
+| scripts/log_analyser.py | Day 10 — Parses exported Windows Server event log CSVs via Python to isolate system errors |
+| scripts/logger.py | Shared audit logging module — used by every script |
+| scripts/offboard_user.py | Day 5 — Disables AD account, strips group memberships, moves to Disabled Users OU, and updates cloud identity |
+| scripts/provision_user.py | Day 1 — AD user provisioning via WinRM |
+| scripts/servicenow_api.py | Raises and resolves ServiceNow incidents via Table REST API |
 
 Task scripts are written on the day each workflow is completed and pushed to GitHub immediately after.
 
@@ -488,3 +503,5 @@ mindmap
 
 ## Audit Trail
 Every task produces a log row in logs/IT_Audit_Log.csv using scripts/logger.py. Automated tasks capture the ServiceNow INC number directly from the API response and resolve the incident upon completion. Manual tasks use the logger script from the terminal with the INC number noted from the PDI. See LOGGING.md for the full schema and rules.
+
+This environment is actively maintained. New workflows are added as skills develop.
