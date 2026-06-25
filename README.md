@@ -402,9 +402,9 @@ Scenario: A Linux server needs a routine health check. SSH in, check services, r
 Workflow:
 1. Boot your Ubuntu Linux VM in VMware Workstation
 2. Note the IP — run `ip a` and find the inet address
-3. From the Windows 11 VM, SSH in:
+3. From the Windows host terminal, SSH in:
 ```
-ssh username@[Linux VM IP]
+ssh jesse@[Linux VM IP]
 ```
 4. Check the SSH service:
 ```
