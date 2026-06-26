@@ -44,6 +44,7 @@ flowchart TD
 | ServiceNow PDI | dev268884 |
 | Microsoft Entra ID | Free tier — managed via Azure Portal and Graph API |
 | Hypervisor | VMware Workstation |
+| Azure Student Subscription | uksouth region — B1s free tier — resource groups created and destroyed per workflow |
 
 ---
 
@@ -54,19 +55,24 @@ flowchart TD
 | .github/workflows/audit_summary.yml | CI — Audit log summary posted on every push to main |
 | .gitignore | Excludes .env and credentials from version control |
 | csv-inputs/new_starters.csv | Sample bulk provisioning input file |
+| Dockerfile | Packages mfa_audit.py into a portable container |
 | LOGGING.md | Full schema and rules for IT_Audit_Log.csv and health_checks.csv |
 | logs/evidence/ | Stores raw output from connectivity and health checks |
+| scripts/ai_triage.py | Reads audit log entries, sends to Gemini API for priority classification and recommended actions |
 | scripts/auto_unlock.py | AD lockout detection and unlock via WinRM |
 | scripts/bulk_provision.py | Bulk AD user provisioning from CSV |
 | scripts/connectivity_check.py | Ping, nslookup, tracert, evidence saving, health log |
+| scripts/deploy_network.py | Provisions Azure VNet, subnet, and NSG via Azure SDK, then tears down the resource group |
 | scripts/dns_audit.py | Automates external DNS record lookup (A, MX, PTR) and captures evidence |
 | scripts/entra_lookup.py | Queries Entra ID via Graph API to verify live user statuses and assigned licensing |
 | scripts/entra_provision.py | Provisions contractor identities directly into cloud-native Entra ID using Graph API |
 | scripts/log_analyser.py | Parses exported Windows Server event log CSVs via Python to isolate system errors |
 | scripts/logger.py | Shared audit logging module — used by every script |
+| scripts/mfa_audit.py | Queries Graph API for Entra ID users without MFA enabled, logs compliance findings |
 | scripts/offboard_user.py | Disables AD account, strips group memberships, moves to Disabled Users OU, and updates cloud identity |
 | scripts/provision_user.py | AD user provisioning via WinRM |
 | scripts/servicenow_api.py | Raises and resolves ServiceNow incidents via Table REST API |
+| scripts/vm_health_check.py | Spins up a B1s Ubuntu VM in Azure, runs bash health check via custom data, retrieves report, tears down |
 
 Task scripts are written on the day each workflow is completed and pushed to GitHub immediately after.
 
@@ -228,40 +234,6 @@ python scripts/entra_lookup.py --upn testcontractor@yourdomain.onmicrosoft.com
 
 ## Security Operations
 
-### Firewall Rule Check and Remediation
-Scenario: A service becomes unreachable. A firewall rule is suspected. Manually test, fix, verify, and document.
-
-Workflow:
-1. Open ServiceNow PDI — raise an Incident manually:
-   - Category: Network
-   - Short description: Firewall rule verified and restored — [date]
-   - Note the INC number
-2. Open Windows Firewall with Advanced Security on Windows Server 2022
-3. Go to Inbound Rules — find the rule for WinRM (port 5985)
-4. Disable the rule deliberately — right click > Disable Rule
-5. From the Windows 11 VM, attempt a WinRM connection — confirm it fails:
-```
-Test-WSMan -ComputerName 192.168.10.50
-```
-6. Go back to Windows Server — re-enable the rule
-7. Retry the connection from Windows 11 VM — confirm it works
-8. Open PowerShell and verify:
-```
-Get-NetFirewallRule | Where-Object { $_.Enabled -eq 'True' } | Select-Object DisplayName, Direction, Action | Format-Table
-```
-9. Run the logger with the INC number from step 1:
-```
-python scripts/logger.py --action FirewallCheck --status success --ticket [INC number] --actor Manual --target WindowsServer2022
-```
-10. Resolve the incident in ServiceNow PDI
-11. Push to GitHub
-
-**What Python does:** Logs the manual action
-
-**Skills:** Windows Firewall, PowerShell, Networking, Python logging, ServiceNow, GitHub
-
----
-
 ### Python Script Hardening
 Scenario: The scripts built across the lab work but are not production ready. Add proper error handling, input validation, and secrets management.
 
@@ -318,38 +290,6 @@ python scripts/connectivity_check.py --target 192.168.10.50
 
 ---
 
-### DNS and DHCP Verification
-Scenario: A device is not resolving hostnames or receiving an IP. Verify DNS and DHCP are correctly configured on the server.
-
-Workflow:
-1. Open DNS Manager on Windows Server 2022 — Server Manager > Tools > DNS
-2. Expand the server > Forward Lookup Zones > corp.local
-3. Check that an A record exists for DESKTOP-QL161MH pointing to 192.168.10.60. If missing — right click the zone > New Host (A) — enter the name and IP
-4. Open DHCP Manager — Server Manager > Tools > DHCP
-5. Expand the server > IPv4 > Scope > Address Leases — confirm the Windows 11 VM has an active lease
-6. On the Windows 11 VM, open Command Prompt:
-```
-ipconfig /all
-nslookup DESKTOP-QL161MH
-```
-7. Confirm the IP, subnet, gateway, and DNS server match expected values
-8. Open ServiceNow PDI — raise an Incident manually:
-   - Category: Network
-   - Short description: DNS and DHCP verified — [date]
-   - Note the INC number
-9. Run the logger with the INC number from step 8:
-```
-python scripts/logger.py --action DNSDHCPCheck --status success --ticket [INC number] --actor Manual --target 192.168.10.60
-```
-10. Resolve the incident in ServiceNow PDI
-11. Push to GitHub
-
-**What Python does:** Logs the manual action
-
-**Skills:** DNS, DHCP, Windows Server, Networking, Python logging, GitHub
-
----
-
 ### DNS Health Check and Public Record Audit
 Scenario: A client reports intermittent connectivity issues. Run a full external DNS audit to rule out misconfiguration — Python automates the checks and saves all evidence.
 
@@ -367,6 +307,102 @@ python scripts/dns_audit.py --domain yourdomain.com
 **What Python automates:** nslookup execution, record capture, evidence saving, health check logging, ServiceNow incident open and resolve
 
 **Skills:** DNS, Networking, Python, Evidence Collection, ServiceNow, GitHub
+
+---
+
+## Cloud Infrastructure
+
+### Cloud Infrastructure — Azure Network Provisioning and Security
+Scenario: A new client environment needs a secure network provisioned. Python uses the Azure SDK to build a VNet with a locked-down NSG, runs a verification check, and tears everything down — zero ongoing cost.
+
+Workflow:
+1. Ensure your .env file contains:
+```
+AZURE_SUBSCRIPTION_ID=your_subscription_id
+AZURE_TENANT_ID=your_tenant_id
+AZURE_CLIENT_ID=your_client_id
+AZURE_CLIENT_SECRET=your_client_secret
+AZURE_RESOURCE_GROUP=rg-it-ops-lab
+AZURE_LOCATION=uksouth
+```
+2. Open ServiceNow PDI — raise an Incident manually:
+   - Category: Network
+   - Short description: Azure network provisioning and security check — [date]
+   - Note the INC number
+3. Run the network provisioning script:
+```
+python scripts/deploy_network.py
+```
+4. The script authenticates to Azure via SDK, creates a resource group, provisions a VNet (10.0.0.0/16), creates a subnet (10.0.1.0/24), attaches an NSG blocking all inbound traffic except port 22, verifies the NSG rules, logs the result, and deletes the entire resource group
+5. Confirm the output shows: VNet created, NSG applied, rules verified, resource group deleted
+6. Run the logger:
+```
+python scripts/logger.py --action AzureNetworkProvision --status success --ticket [INC number] --actor deploy_network.py --target Azure-uksouth
+```
+7. Resolve the incident in ServiceNow PDI
+8. Push to GitHub
+
+**What Python automates:** Azure authentication, VNet and subnet creation, NSG rule configuration, verification, teardown, audit logging
+
+**Skills:** Azure SDK, IP Subnetting, Network Security Groups, Cloud Networking, Python, ServiceNow, GitHub
+
+---
+
+### Cloud Infrastructure — Linux VM Bootstrap and Health Check
+Scenario: A Linux server needs provisioning and an immediate health check. Python spins up a B1s Ubuntu VM in Azure, runs a bash health check automatically on boot, pulls the report back locally, and destroys the infrastructure.
+
+Workflow:
+1. Run the VM bootstrap script:
+```
+python scripts/vm_health_check.py
+```
+2. The script creates a resource group, provisions a B1s Ubuntu VM inside a secured subnet, passes a bash script via custom data that runs on boot — checking disk usage, active ports, and system uptime — waits for the report, downloads it to logs/evidence/vm_health_[timestamp].txt, and deletes the resource group
+3. Open logs/evidence/ — confirm the health report file is there
+4. Review the report — note disk usage, active ports, and uptime values
+5. Open ServiceNow PDI — raise an Incident manually:
+   - Category: Infrastructure
+   - Short description: Azure Linux VM health check — [date]
+   - Note the INC number
+6. Run the logger:
+```
+python scripts/logger.py --action AzureVMHealthCheck --status success --ticket [INC number] --actor vm_health_check.py --target Azure-UbuntuVM
+```
+7. Resolve the incident in ServiceNow PDI
+8. Push to GitHub
+
+**What Python automates:** Azure VM provisioning, bash script injection via custom data, report retrieval, infrastructure teardown, audit logging
+
+**Skills:** Azure SDK, Linux Administration, Infrastructure as Code, Cloud Lifecycle Management, Python, ServiceNow, GitHub
+
+---
+
+### Cloud Infrastructure — MFA Compliance Audit with Docker
+Scenario: A security audit is required. Python queries Microsoft Graph API to identify all Entra ID users without MFA enabled, logs the findings, and the script is packaged into a Docker container so it can run on any machine.
+
+Workflow:
+1. Run the MFA audit script:
+```
+python scripts/mfa_audit.py
+```
+2. The script authenticates to Graph API, pulls all users from your Entra ID tenant, checks MFA registration status for each, prints a compliance summary to the terminal, saves findings to logs/evidence/mfa_audit_[timestamp].txt, raises a ServiceNow incident, logs the action, and resolves the incident
+3. Review the output — note any users flagged as non-compliant
+4. Confirm logs/evidence/ contains the audit file
+5. Build the Docker image:
+```
+docker build -t mfa-auditor .
+```
+6. Run the container:
+```
+docker run --env-file .env mfa-auditor
+```
+7. Confirm the container produces the same output as the direct script run
+8. Push to GitHub — Dockerfile and script included, .env excluded
+
+**What Python automates:** Graph API authentication, MFA status check per user, findings logging, ServiceNow incident open and resolve
+
+**What Docker does:** Packages the auditor into a portable container that runs identically on any machine
+
+**Skills:** Microsoft Graph API, Entra ID Security, MFA Compliance, Docker, Python, ServiceNow, GitHub
 
 ---
 
@@ -396,43 +432,34 @@ python scripts/log_analyser.py --input logs/system_errors.csv
 
 ---
 
-### Linux SSH and System Health Check
-Scenario: A Linux server needs a routine health check. SSH in, check services, review disk and logs, and create a test user.
+### System Administration — AI-Assisted Incident Triage
+Scenario: Before starting a shift, Python reads the recent audit log, sends the entries to Gemini, and gets back a priority ranking and recommended action for each — helping the engineer know what to tackle first.
 
 Workflow:
-1. Boot your Ubuntu Linux VM in VMware Workstation
-2. Note the IP — run `ip a` and find the inet address
-3. From the Windows host terminal, SSH in:
+1. Ensure your .env file contains:
 ```
-ssh jesse@[Linux VM IP]
+GEMINI_API_KEY=your_gemini_api_key
 ```
-4. Check the SSH service:
+2. Run the triage script:
 ```
-systemctl status ssh
+python scripts/ai_triage.py --input logs/IT_Audit_Log.csv
 ```
-5. Check disk usage:
+3. The script reads the last 10 log entries, sends them to Gemini with a structured prompt requesting priority classification and recommended next action per entry, prints the response to terminal, and saves output to logs/evidence/triage_[timestamp].txt
+4. Review the output — note which incidents Gemini flagged as highest priority
+5. Open ServiceNow PDI — raise an Incident manually:
+   - Category: Service Desk
+   - Short description: AI-assisted triage completed — [date]
+   - Note the INC number
+6. Run the logger:
 ```
-df -h
+python scripts/logger.py --action AITriage --status success --ticket [INC number] --actor ai_triage.py --target IT_Audit_Log.csv
 ```
-6. Review the last 20 lines of the system log:
-```
-tail -20 /var/log/syslog
-```
-7. Create a test user and confirm:
-```
-sudo adduser testuser
-grep testuser /etc/passwd
-```
-8. Back on your Windows machine, run the logger:
-```
-python scripts/logger.py --action LinuxHealthCheck --status success --ticket [INC number] --actor Manual --target [Linux VM IP]
-```
-9. Open ServiceNow PDI — raise an Incident manually, note the INC number, then resolve it
-10. Push to GitHub
+7. Resolve the incident in ServiceNow PDI
+8. Push to GitHub
 
-**What Python does:** Logs the manual action
+**What Python automates:** Log parsing, Gemini API call, structured prompt engineering, evidence saving, audit logging
 
-**Skills:** Linux CLI, SSH, User Management, System Monitoring, VMware, Python logging, ServiceNow, GitHub
+**Skills:** Python, Gemini API, Prompt Engineering, Log Analysis, ServiceNow, GitHub
 
 ---
 
@@ -453,11 +480,7 @@ Rules:
 - Raise a real ServiceNow Incident for each ticket
 - Log every action to IT_Audit_Log.csv
 - Resolve the ServiceNow ticket before moving to the next one
-- Push everything to GitHub at the end with a single commit
-
-**Skills:** Active Directory, Entra ID, PowerShell, Python, ServiceNow, Networking, Windows Server, GitHub
-
----
+- Push everything to GitHub
 
 ## Skills Covered
 
@@ -486,11 +509,18 @@ mindmap
       Windows Event Logs
       Linux SSH
       Log Analysis
-    Cloud and ITSM
-      ServiceNow REST API
-      Incident Lifecycle
-      GitHub Actions
-      CI/CD Audit Reporting
+    Cloud Infrastructure
+      Azure SDK
+      Virtual Networks and Subnetting
+      Network Security Groups
+      Cloud Lifecycle Management
+      Linux Bootstrapping
+      Infrastructure as Code
+      Docker and Containerisation
+    AI and Automation
+      Gemini API
+      Prompt Engineering
+      AI-Assisted Decision Support
     Python Automation
       WinRM Integration
       REST API Calls
