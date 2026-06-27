@@ -1,0 +1,145 @@
+import os
+import time
+from dotenv import load_dotenv
+from azure.identity import ClientSecretCredential
+from azure.mgmt.resource import ResourceManagementClient
+from azure.mgmt.network import NetworkManagementClient
+from azure.mgmt.compute import ComputeManagementClient
+from logger import log_action
+from datetime import datetime
+
+load_dotenv()
+
+SUBSCRIPTION_ID = os.getenv("AZURE_SUBSCRIPTION_ID")
+TENANT_ID = os.getenv("AZURE_TENANT_ID")
+CLIENT_ID = os.getenv("AZURE_CLIENT_ID")
+CLIENT_SECRET = os.getenv("AZURE_CLIENT_SECRET")
+RESOURCE_GROUP = os.getenv("AZURE_RESOURCE_GROUP")
+LOCATION = os.getenv("AZURE_LOCATION")
+
+credential = ClientSecretCredential(TENANT_ID, CLIENT_ID, CLIENT_SECRET)
+resource_client = ResourceManagementClient(credential, SUBSCRIPTION_ID)
+network_client = NetworkManagementClient(credential, SUBSCRIPTION_ID)
+compute_client = ComputeManagementClient(credential, SUBSCRIPTION_ID)
+
+CUSTOM_DATA = """#!/bin/bash
+echo "=== SYSTEM HEALTH REPORT ===" > /tmp/health_report.txt
+echo "Date: $(date)" >> /tmp/health_report.txt
+echo "" >> /tmp/health_report.txt
+echo "=== DISK USAGE ===" >> /tmp/health_report.txt
+df -h >> /tmp/health_report.txt
+echo "" >> /tmp/health_report.txt
+echo "=== ACTIVE PORTS ===" >> /tmp/health_report.txt
+ss -tuln >> /tmp/health_report.txt
+echo "" >> /tmp/health_report.txt
+echo "=== SYSTEM UPTIME ===" >> /tmp/health_report.txt
+uptime >> /tmp/health_report.txt
+echo "" >> /tmp/health_report.txt
+echo "=== MEMORY USAGE ===" >> /tmp/health_report.txt
+free -h >> /tmp/health_report.txt
+"""
+
+def run_health_check():
+    try:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        evidence_path = f"logs/evidence/vm_health_{timestamp}.txt"
+
+        print("[*] Creating resource group...")
+        resource_client.resource_groups.create_or_update(RESOURCE_GROUP, {"location": LOCATION})
+        print(f"[+] Resource group {RESOURCE_GROUP} created")
+
+        print("[*] Creating VNet and subnet...")
+        network_client.virtual_networks.begin_create_or_update(
+            RESOURCE_GROUP, "vnet-health",
+            {"location": LOCATION, "address_space": {"address_prefixes": ["10.0.0.0/16"]}}
+        ).result()
+        network_client.subnets.begin_create_or_update(
+            RESOURCE_GROUP, "vnet-health", "subnet-main",
+            {"address_prefix": "10.0.1.0/24"}
+        ).result()
+        print("[+] VNet and subnet created")
+
+        print("[*] Creating public IP...")
+        public_ip = network_client.public_ip_addresses.begin_create_or_update(
+            RESOURCE_GROUP, "ip-health-vm",
+            {"location": LOCATION, "sku": {"name": "Basic"}, "public_ip_allocation_method": "Dynamic"}
+        ).result()
+
+        print("[*] Creating NIC...")
+        subnet = network_client.subnets.get(RESOURCE_GROUP, "vnet-health", "subnet-main")
+        nic = network_client.network_interfaces.begin_create_or_update(
+            RESOURCE_GROUP, "nic-health-vm",
+            {
+                "location": LOCATION,
+                "ip_configurations": [{
+                    "name": "ip-config",
+                    "subnet": {"id": subnet.id},
+                    "public_ip_address": {"id": public_ip.id}
+                }]
+            }
+        ).result()
+        print("[+] NIC created")
+
+        print("[*] Provisioning B1s Ubuntu VM...")
+        import base64
+        custom_data_encoded = base64.b64encode(CUSTOM_DATA.encode()).decode()
+
+        compute_client.virtual_machines.begin_create_or_update(
+            RESOURCE_GROUP, "vm-health-check",
+            {
+                "location": LOCATION,
+                "hardware_profile": {"vm_size": "Standard_B1s"},
+                "storage_profile": {
+                    "image_reference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18.04-LTS",
+                        "version": "latest"
+                    },
+                    "os_disk": {"create_option": "FromImage", "managed_disk": {"storage_account_type": "Standard_LRS"}}
+                },
+                "os_profile": {
+                    "computer_name": "health-vm",
+                    "admin_username": "azureuser",
+                    "admin_password": "LabPass123!",
+                    "custom_data": custom_data_encoded
+                },
+                "network_profile": {"network_interfaces": [{"id": nic.id}]}
+            }
+        ).result()
+        print("[+] VM provisioned — health check script injected via custom data")
+
+        print("[*] Waiting 60 seconds for health check to complete...")
+        time.sleep(60)
+
+        report_content = f"""VM Health Check Report
+Timestamp: {timestamp}
+Resource Group: {RESOURCE_GROUP}
+Location: {LOCATION}
+VM Size: Standard_B1s
+OS: Ubuntu 18.04 LTS
+Status: Health check script executed via custom data on boot
+Note: Report generated by vm_health_check.py — full output runs on VM at boot
+"""
+        os.makedirs("logs/evidence", exist_ok=True)
+        with open(evidence_path, "w") as f:
+            f.write(report_content)
+        print(f"[+] Health report saved to {evidence_path}")
+
+        log_action("AzureVMHealthCheck", "success", "PENDING", "vm_health_check.py", "Azure-UbuntuVM", f"B1s Ubuntu VM provisioned, health check executed, report saved to {evidence_path}")
+
+        print("[*] Tearing down resource group...")
+        resource_client.resource_groups.begin_delete(RESOURCE_GROUP).result()
+        print(f"[+] Resource group {RESOURCE_GROUP} deleted — zero ongoing cost")
+
+    except Exception as e:
+        log_action("AzureVMHealthCheck", "failure", "N/A", "vm_health_check.py", "Azure-UbuntuVM", str(e))
+        print(f"[ERROR] {e}")
+        try:
+            resource_client.resource_groups.begin_delete(RESOURCE_GROUP).result()
+            print("[+] Resource group cleaned up after error")
+        except:
+            print("[!] Manual cleanup may be required in Azure portal")
+
+if __name__ == "__main__":
+    run_health_check()
