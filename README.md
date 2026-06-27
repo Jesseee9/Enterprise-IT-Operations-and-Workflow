@@ -1,5 +1,5 @@
 # Enterprise IT Operations and Workflow
-A fully automated IT operations environment simulating real MSP workflows across Active Directory, ServiceNow, Microsoft Entra ID, and cloud infrastructure. Every workflow follows real support ticket discipline — where Python can genuinely automate something, it does. Where it can't, the task is done manually and logged.
+A hybrid IT operations environment combining on-premise Active Directory automation with Azure cloud infrastructure, Microsoft Entra ID, ServiceNow ITSM, and AI-assisted tooling. Every workflow follows real support ticket discipline — where Python can genuinely automate something, it does. Where it can't, the task is done manually and logged.
 
 Built and maintained by Jesse Adejoh.
 
@@ -21,7 +21,10 @@ flowchart TD
     H --> I[Microsoft Entra ID\nCloud Identity Management]
     B --> J[IT_Audit_Log.csv\nAudit Trail]
     J --> K[GitHub Actions\nCI — Audit Summary on every push]
-    B --> L[health_checks.csv\nConnectivity and Log Analysis Results]
+    B --> L[Azure SDK]
+    L --> M[VNet / NSG / Ubuntu VM\nCloud Infrastructure — uksouth]
+    B --> N[Gemini API]
+    N --> O[AI Incident Triage\nPriority Classification]
 ```
 
 ---
@@ -39,12 +42,11 @@ flowchart TD
 | Component | Details |
 |---|---|
 | Windows Server 2022 | 192.168.10.50 — corp.local domain |
-| Windows 11 VM | 192.168.10.60 — DESKTOP-QL161MH |
-| Ubuntu Linux VM | IP confirmed at task time |
+| Windows 11 VM | 192.168.10.60 — used for network testing only |
 | ServiceNow PDI | dev268884 |
-| Microsoft Entra ID | Free tier — managed via Azure Portal and Graph API |
+| Microsoft Entra ID | Free tier — managed via Entra ID portal and Graph API |
 | Hypervisor | VMware Workstation |
-| Azure Student Subscription | uksouth region — B1s free tier — resource groups created and destroyed per workflow |
+| Azure | Personal subscription — uksouth region — resources created and destroyed per workflow |
 
 ---
 
@@ -312,7 +314,7 @@ python scripts/dns_audit.py --domain yourdomain.com
 
 ## Cloud Infrastructure
 
-### Cloud Infrastructure — Azure Network Provisioning and Security
+### Azure Network Provisioning and Security
 Scenario: A new client environment needs a secure network provisioned. Python uses the Azure SDK to build a VNet with a locked-down NSG, runs a verification check, and tears everything down — zero ongoing cost.
 
 Workflow:
@@ -348,7 +350,7 @@ python scripts/logger.py --action AzureNetworkProvision --status success --ticke
 
 ---
 
-### Cloud Infrastructure — Linux VM Bootstrap and Health Check
+### Linux VM Bootstrap and Health Check
 Scenario: A Linux server needs provisioning and an immediate health check. Python spins up a B1s Ubuntu VM in Azure, runs a bash health check automatically on boot, pulls the report back locally, and destroys the infrastructure.
 
 Workflow:
@@ -376,7 +378,7 @@ python scripts/logger.py --action AzureVMHealthCheck --status success --ticket [
 
 ---
 
-### Cloud Infrastructure — MFA Compliance Audit with Docker
+### MFA Compliance Audit with Docker
 Scenario: A security audit is required. Python queries Microsoft Graph API to identify all Entra ID users without MFA enabled, logs the findings, and the script is packaged into a Docker container so it can run on any machine.
 
 Workflow:
@@ -412,19 +414,23 @@ docker run --env-file .env mfa-auditor
 Scenario: Review system health by exporting Windows Event Logs with PowerShell and analysing them with Python to produce a summary.
 
 Workflow:
-1. Open PowerShell on Windows Server 2022 and export the last 20 system errors:
+1. Open PowerShell on Windows Server 2022 and create the logs folder if it does not exist:
+```
+New-Item -ItemType Directory -Force -Path C:\logs
+```
+2. Open PowerShell on Windows Server 2022 and export the last 20 system errors:
 ```
 Get-EventLog -LogName System -EntryType Error -Newest 20 | Select-Object TimeGenerated, Source, Message | Export-Csv -Path C:\logs\system_errors.csv -NoTypeInformation
 ```
-2. Copy system_errors.csv to your local project folder under logs/
-3. Run the log analyser:
+3. Copy system_errors.csv to your local project folder under logs/
+4. Run the log analyser:
 ```
 python scripts/log_analyser.py --input logs/system_errors.csv
 ```
-4. The script counts total errors, identifies the top 3 sources, prints the most recent error, saves a summary to logs/health_checks.csv, raises a ServiceNow incident, and resolves it
-5. Review the output — note any recurring sources worth investigating
-6. Open ServiceNow PDI — confirm the incident shows as Resolved
-7. Push everything to GitHub
+5. The script counts total errors, identifies the top 3 sources, prints the most recent error, saves a summary to logs/health_checks.csv, raises a ServiceNow incident, and resolves it
+6. Review the output — note any recurring sources worth investigating
+7. Open ServiceNow PDI — confirm the incident shows as Resolved
+8. Push everything to GitHub
 
 **What Python automates:** CSV parsing, error counting, source analysis, summary output, ServiceNow incident open and resolve, logging
 
@@ -481,6 +487,7 @@ Rules:
 - Log every action to IT_Audit_Log.csv
 - Resolve the ServiceNow ticket before moving to the next one
 - Push everything to GitHub
+- Push everything to GitHub at the end with a single commit
 
 ## Skills Covered
 
@@ -501,13 +508,11 @@ mindmap
       dotenv Secrets Management
     Network Operations
       DNS Resolution
-      DHCP Management
       Ping / Tracert / Nslookup
       VMware Networking
     System Administration
       PowerShell
       Windows Event Logs
-      Linux SSH
       Log Analysis
     Cloud Infrastructure
       Azure SDK
