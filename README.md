@@ -337,8 +337,8 @@ Note: The resource group rg-Enterprise-IT-Lab must be pre-created in the Azure p
 ```
 python scripts/deploy_network.py
 ```
-4. The script authenticates to Azure via SDK, creates a resource group, provisions a VNet (10.0.0.0/16), creates a subnet (10.0.1.0/24), attaches an NSG blocking all inbound traffic except port 22, verifies the NSG rules, logs the result, and deletes the entire resource group
-5. Confirm the output shows: VNet created, NSG applied, rules verified, resource group deleted
+4. The script authenticates to Azure via SDK, provisions a VNet (10.0.0.0/16), creates a subnet (10.0.1.0/24), attaches an NSG blocking all inbound traffic except port 22, verifies the NSG rules, logs the result, and tears down the VNet and NSG — the resource group remains
+5. Confirm the output shows: VNet created, NSG applied, rules verified, VNet and NSG deleted
 6. Run the logger:
 ```
 python scripts/logger.py --action AzureNetworkProvision --status success --ticket [INC number] --actor deploy_network.py --target Azure-uksouth
@@ -488,7 +488,7 @@ Rules:
 - Raise a real ServiceNow Incident for each ticket
 - Log every action to IT_Audit_Log.csv
 - Resolve the ServiceNow ticket before moving to the next one
-- Push everything to GitHub
+
 - Push everything to GitHub at the end with a single commit
 
 ## Skills Covered
