@@ -24,6 +24,13 @@ def deploy_network():
         
         
         
+        print("[*] Running pre-flight check...")
+        try:
+            existing_vnet = network_client.virtual_networks.get(RESOURCE_GROUP, "vnet-it-ops")
+            print("[!] VNet already exists in resource group — clear the resource group in the Azure portal before running")
+            exit(1)
+        except Exception:
+            print("[+] Resource group is clear — proceeding")
         print("[*] Creating VNet...")
         vnet_params = {
             "location": LOCATION,

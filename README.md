@@ -324,9 +324,11 @@ AZURE_SUBSCRIPTION_ID=your_subscription_id
 AZURE_TENANT_ID=your_tenant_id
 AZURE_CLIENT_ID=your_client_id
 AZURE_CLIENT_SECRET=your_client_secret
-AZURE_RESOURCE_GROUP=rg-it-ops-lab
+AZURE_RESOURCE_GROUP=rg-Enterprise-IT-Lab
 AZURE_LOCATION=uksouth
 ```
+
+Note: The resource group rg-Enterprise-IT-Lab must be pre-created in the Azure portal and must be empty before running this script.
 2. Open ServiceNow PDI — raise an Incident manually:
    - Category: Network
    - Short description: Azure network provisioning and security check — [date]
