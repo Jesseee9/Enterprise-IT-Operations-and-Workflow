@@ -83,3 +83,17 @@ At line:2 char:5
 2026-06-17T14:27:34,FirewallCheck,success,INC0010014,Manual,WindowsServer2022,
 2026-06-18T13:53:43,OffboardUser,success,INC0010015,offboard_user.py,sarah.blake,"Account disabled, groups removed, moved to Disabled Users OU"
 2026-06-20T11:36:32,LogAnalysis,success,INC0010016,log_analyser.py,WindowsServer2022,Analysed 4 system errors
+2026-06-28T16:12:23,AzureNetworkProvision,failure,N/A,deploy_network.py,Azure-uksouth,"(AuthorizationFailed) The client 'abe7a5df-8642-4ff1-adab-c38fd97db1ee' with object id '5958ba6c-ce2d-45c0-b678-35ae62789b28' does not have authorization to perform action 'Microsoft.Resources/subscriptions/resourcegroups/write' over scope '/subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourcegroups/rg-Enterprise-IT-Lab' or the scope is invalid. If access was recently granted, please refresh your credentials.
+Code: AuthorizationFailed
+Message: The client 'abe7a5df-8642-4ff1-adab-c38fd97db1ee' with object id '5958ba6c-ce2d-45c0-b678-35ae62789b28' does not have authorization to perform action 'Microsoft.Resources/subscriptions/resourcegroups/write' over scope '/subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourcegroups/rg-Enterprise-IT-Lab' or the scope is invalid. If access was recently granted, please refresh your credentials."
+2026-06-28T16:37:02,AzureNetworkProvision,failure,N/A,deploy_network.py,Azure-uksouth,"(SecurityRuleParametersMissingForPortRanges) Required security rule parameters are missing for security rule with Id: /subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourceGroups/rg-Enterprise-IT-Lab/providers/Microsoft.Network/networkSecurityGroups/nsg-it-ops/securityRules/Allow-SSH. Security rule must specify either SourcePortRange or SourcePortRanges.
+Code: SecurityRuleParametersMissingForPortRanges
+Message: Required security rule parameters are missing for security rule with Id: /subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourceGroups/rg-Enterprise-IT-Lab/providers/Microsoft.Network/networkSecurityGroups/nsg-it-ops/securityRules/Allow-SSH. Security rule must specify either SourcePortRange or SourcePortRanges."
+2026-06-28T16:41:48,AzureNetworkProvision,failure,N/A,deploy_network.py,Azure-uksouth,"(ResourceGroupNotFound) Resource group 'rg-Enterprise-IT-Lab' could not be found.
+Code: ResourceGroupNotFound
+Message: Resource group 'rg-Enterprise-IT-Lab' could not be found."
+2026-06-28T16:44:26,AzureNetworkProvision,failure,N/A,deploy_network.py,Azure-uksouth,"(SecurityRuleParametersMissingForPortRanges) Required security rule parameters are missing for security rule with Id: /subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourceGroups/rg-Enterprise-IT-Lab/providers/Microsoft.Network/networkSecurityGroups/nsg-it-ops/securityRules/Allow-SSH. Security rule must specify either SourcePortRange or SourcePortRanges.
+Code: SecurityRuleParametersMissingForPortRanges
+Message: Required security rule parameters are missing for security rule with Id: /subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourceGroups/rg-Enterprise-IT-Lab/providers/Microsoft.Network/networkSecurityGroups/nsg-it-ops/securityRules/Allow-SSH. Security rule must specify either SourcePortRange or SourcePortRanges."
+2026-06-28T16:55:53,AzureNetworkProvision,success,PENDING,deploy_network.py,Azure-uksouth,"VNet 10.0.0.0/16, subnet 10.0.1.0/24, NSG with SSH allow and deny-all created and verified — resources deployed into pre-provisioned resource group"
+2026-06-28T16:57:00,AzureNetworkProvision,success,INC0010017,deploy_network.py,Azure-uksouth,
