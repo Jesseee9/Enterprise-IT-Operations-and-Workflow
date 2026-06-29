@@ -47,6 +47,7 @@ flowchart TD
 | Microsoft Entra ID | Free tier — managed via Entra ID portal and Graph API |
 | Hypervisor | VMware Workstation |
 | Azure | Personal subscription — uksouth region — resources created and destroyed per workflow |
+| azure-mgmt-compute | Pinned to 29.1.0 — version 38.x is incompatible with VM provisioning |
 
 ---
 
@@ -360,7 +361,7 @@ Workflow:
 ```
 python scripts/vm_health_check.py
 ```
-2. The script creates a resource group, provisions a B1s Ubuntu VM inside a secured subnet, passes a bash script via custom data that runs on boot — checking disk usage, active ports, and system uptime — waits for the report, downloads it to logs/evidence/vm_health_[timestamp].txt, and deletes the resource group
+2. The script provisions a B1s Ubuntu VM inside a secured subnet within rg-Enterprise-IT-Lab, passes a bash script via custom data that runs on boot — checking disk usage, active ports, and system uptime — waits for the report, downloads it to logs/evidence/vm_health_[timestamp].txt, and deletes the VM and all associated network resources
 3. Open logs/evidence/ — confirm the health report file is there
 4. Review the report — note disk usage, active ports, and uptime values
 5. Open ServiceNow PDI — raise an Incident manually:

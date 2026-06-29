@@ -97,3 +97,24 @@ Code: SecurityRuleParametersMissingForPortRanges
 Message: Required security rule parameters are missing for security rule with Id: /subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourceGroups/rg-Enterprise-IT-Lab/providers/Microsoft.Network/networkSecurityGroups/nsg-it-ops/securityRules/Allow-SSH. Security rule must specify either SourcePortRange or SourcePortRanges."
 2026-06-28T16:55:53,AzureNetworkProvision,success,PENDING,deploy_network.py,Azure-uksouth,"VNet 10.0.0.0/16, subnet 10.0.1.0/24, NSG with SSH allow and deny-all created and verified — resources deployed into pre-provisioned resource group"
 2026-06-28T16:57:00,AzureNetworkProvision,success,INC0010017,deploy_network.py,Azure-uksouth,
+2026-06-29T19:57:16,AzureVMHealthCheck,failure,N/A,vm_health_check.py,Azure-UbuntuVM,"(IPv4BasicSkuPublicIpCountLimitReached) Cannot create more than 0 IPv4 Basic SKU public IP addresses for this subscription in this region.
+Code: IPv4BasicSkuPublicIpCountLimitReached
+Message: Cannot create more than 0 IPv4 Basic SKU public IP addresses for this subscription in this region."
+2026-06-29T19:59:45,AzureVMHealthCheck,failure,N/A,vm_health_check.py,Azure-UbuntuVM,"(InvalidRequestContent) The request content was invalid and could not be deserialized: 'Could not find member 'hardware_profile' on object of type 'ResourceDefinition'. Path 'hardware_profile', line 1, position 42.'.
+Code: InvalidRequestContent
+Message: The request content was invalid and could not be deserialized: 'Could not find member 'hardware_profile' on object of type 'ResourceDefinition'. Path 'hardware_profile', line 1, position 42.'."
+2026-06-29T20:00:08,AzureVMHealthCheck,failure,N/A,vm_health_check.py,Azure-UbuntuVM,"(InvalidRequestContent) The request content was invalid and could not be deserialized: 'Could not find member 'hardware_profile' on object of type 'ResourceDefinition'. Path 'hardware_profile', line 1, position 42.'.
+Code: InvalidRequestContent
+Message: The request content was invalid and could not be deserialized: 'Could not find member 'hardware_profile' on object of type 'ResourceDefinition'. Path 'hardware_profile', line 1, position 42.'."
+2026-06-29T20:19:12,AzureVMHealthCheck,success,PENDING,vm_health_check.py,Azure-UbuntuVM,"B1s Ubuntu VM provisioned, health check executed, report saved to logs/evidence/vm_health_20260629_201731.txt"
+2026-06-29T20:19:43,AzureVMHealthCheck,failure,N/A,vm_health_check.py,Azure-UbuntuVM,"(NicInUse) Network Interface /subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourceGroups/rg-Enterprise-IT-Lab/providers/Microsoft.Network/networkInterfaces/nic-health-vm is used by existing resource /subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourceGroups/rg-Enterprise-IT-Lab/providers/Microsoft.Compute/virtualMachines/vm-health-check. In order to delete the network interface, it must be dissociated from the resource. To learn more, see aka.ms/deletenic.
+Code: NicInUse
+Message: Network Interface /subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourceGroups/rg-Enterprise-IT-Lab/providers/Microsoft.Network/networkInterfaces/nic-health-vm is used by existing resource /subscriptions/83a751af-8d89-4fb6-92be-6ada41af6b83/resourceGroups/rg-Enterprise-IT-Lab/providers/Microsoft.Compute/virtualMachines/vm-health-check. In order to delete the network interface, it must be dissociated from the resource. To learn more, see aka.ms/deletenic."
+2026-06-29T20:19:54,AzureVMHealthCheck,success,PENDING,vm_health_check.py,Azure-UbuntuVM,"B1s Ubuntu VM provisioned, health check executed, report saved to logs/evidence/vm_health_20260629_201820.txt"
+2026-06-29T20:20:13,AzureVMHealthCheck,failure,N/A,vm_health_check.py,Azure-UbuntuVM,"(OperationPreempted) Operation execution has been preempted by a more recent operation.
+Code: OperationPreempted
+Message: Operation execution has been preempted by a more recent operation."
+2026-06-29T20:20:18,AzureVMHealthCheck,failure,N/A,vm_health_check.py,Azure-UbuntuVM,"(ResourceNotFound) The Resource 'Microsoft.Compute/virtualMachines/vm-health-check' under resource group 'rg-Enterprise-IT-Lab' was not found. For more details please go to https://aka.ms/ARMResourceNotFoundFix
+Code: ResourceNotFound
+Message: The Resource 'Microsoft.Compute/virtualMachines/vm-health-check' under resource group 'rg-Enterprise-IT-Lab' was not found. For more details please go to https://aka.ms/ARMResourceNotFoundFix"
+2026-06-29T20:22:31,AzureVMHealthCheck,success,PENDING,vm_health_check.py,Azure-UbuntuVM,"B1s Ubuntu VM provisioned, health check executed, report saved to logs/evidence/vm_health_20260629_202029.txt"
