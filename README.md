@@ -65,7 +65,7 @@ flowchart TD
 | scripts/auto_unlock.py | AD lockout detection and unlock via WinRM |
 | scripts/bulk_provision.py | Bulk AD user provisioning from CSV |
 | scripts/connectivity_check.py | Ping, nslookup, tracert, evidence saving, health log |
-| scripts/deploy_network.py | Provisions Azure VNet, subnet, and NSG via Azure SDK, then tears down the resource group |
+| scripts/deploy_network.py | Provisions Azure VNet, subnet, and NSG via Azure SDK, then tears down the VNet and NSG — the resource group remains |
 | scripts/dns_audit.py | Automates external DNS record lookup (A, MX, PTR) and captures evidence |
 | scripts/entra_lookup.py | Queries Entra ID via Graph API to verify live user statuses and assigned licensing |
 | scripts/entra_provision.py | Provisions contractor identities directly into cloud-native Entra ID using Graph API |
