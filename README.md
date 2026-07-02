@@ -131,4 +131,4 @@ mindmap
 
 Every task produces a log row in `logs/IT_Audit_Log.csv` using `scripts/logger.py`. Automated tasks capture the ServiceNow INC number directly from the API response and resolve the incident upon completion. Manual tasks use the logger script from the terminal with the INC number noted from the PDI.
 
-For full environment setup, script inventory, dependencies, and configuration details see [SETUP.md](SETUP.md).
+For full environment setup, script inventory, dependencies, and configuration details see [SETUP.md](SETUP.md)
