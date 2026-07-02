@@ -130,3 +130,7 @@ Security Notes
 	•	Never commit .env to GitHub — confirm .gitignore excludes it before every push
 	•	WinRM is configured for HTTP on an isolated internal lab network — in a production environment use HTTPS with a valid certificate
 	•	Client secrets in Entra ID expire — check expiry dates and rotate before they lapse
+
+## Workflows
+
+For full step-by-step runbooks for every workflow in this lab, see the README.md workflow sections. Each workflow documents the exact commands, what Python automates, manual steps required, and skills demonstrated.
