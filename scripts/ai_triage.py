@@ -1,14 +1,14 @@
 import os
 import csv
 import argparse
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 from logger import log_action
 from datetime import datetime
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
 def run_triage(input_file):
     try:
@@ -35,8 +35,10 @@ Entries:
 Format your response clearly with one entry per line."""
 
         print("[*] Sending to Gemini for triage analysis...")
-        model = genai.GenerativeModel("gemini-2.0-flash")
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-3.1-flash-lite",
+            contents=prompt,
+        )
         result = response.text
 
         print("\n[+] Triage Results:")
