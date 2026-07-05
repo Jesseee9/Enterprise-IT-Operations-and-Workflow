@@ -133,4 +133,4 @@ Security Notes
 
 ## Workflows
 
-For full step-by-step runbooks for every workflow in this lab, see the README.md workflow sections. Each workflow documents the exact commands, what Python automates, manual steps required, and skills demonstrated.
+For full step-by-step runbooks for every workflow in this lab, see the Workflow.md workflow sections. Each workflow documents the exact commands, what Python automates, manual steps required, and skills demonstrated.
