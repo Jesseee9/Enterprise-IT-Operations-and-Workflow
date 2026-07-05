@@ -399,7 +399,9 @@ Workflow:
 ```
 GEMINI_API_KEY=your_gemini_api_key
 ```
+
 Uses the google-genai SDK (migrated from the deprecated google-generativeai package) calling model gemini-3.1-flash-lite.
+
 2. Run the triage script:
 ```
 py scripts/ai_triage.py --input logs/IT_Audit_Log.csv
