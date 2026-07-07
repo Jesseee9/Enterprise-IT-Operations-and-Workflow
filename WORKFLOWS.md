@@ -424,16 +424,15 @@ py scripts/logger.py --action AITriage --status success --ticket [INC number] --
 **Skills:** Python, Gemini API, Prompt Engineering, Log Analysis, ServiceNow, GitHub
 
 ---
-
 ## Shift Simulation
 Scenario: You are covering a support shift. Work through five tickets in order. Each must be fully resolved and closed in ServiceNow before moving to the next. Log everything.
 
 Ticket Queue:
 
 | # | Type | Task |
-|---|---|---|
+|---|------|------|
 | 1 | New starter | Create AD account for James.Okafor, department = Finance, assign to Finance group |
-| 2 | Locked account | Sarah.Blade is locked out — check Event Viewer for Event ID 4625, run auto_unlock.py, verify with PowerShell |
+| 2 | Locked account | Sarah.Blake is locked out — simulate via PowerShell (`Set-ADUser -Replace @{lockoutTime=1}`), run auto_unlock.py, verify with PowerShell |
 | 3 | Connectivity | A user cannot reach the server — run connectivity_check.py against 192.168.10.50, review the evidence file, document findings |
 | 4 | Offboarding | A contractor's account needs disabling — run offboard_user.py, verify in AD and Entra ID, confirm groups are cleared |
 | 5 | Health check | Export system errors with PowerShell, run log_analyser.py, confirm no critical unresolved errors |
@@ -443,3 +442,4 @@ Rules:
 - Log every action to IT_Audit_Log.csv
 - Resolve the ServiceNow ticket before moving to the next one
 - Push everything to GitHub at the end with a single commit
+
