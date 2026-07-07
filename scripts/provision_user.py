@@ -2,8 +2,8 @@ import argparse
 import os
 from dotenv import load_dotenv
 import winrm
-from scripts.servicenow_api import create_servicenow_incident
-from scripts.logger import log_action
+from servicenow_api import create_servicenow_incident
+from logger import log_action
 
 load_dotenv()
 

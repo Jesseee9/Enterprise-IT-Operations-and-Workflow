@@ -224,3 +224,12 @@ violations {
 2026-07-05T11:41:39,AITriage,failure,N/A,ai_triage.py,logs/IT_Audit_Log.csv,name 'result' is not defined
 2026-07-05T11:43:34,AITriage,success,PENDING,ai_triage.py,logs/IT_Audit_Log.csv,Gemini triage analysis completed successfully
 2026-07-05T11:53:46,AITriage,success,INC0010022,ai_triage.py,IT_Audit_Log.csv,
+2026-07-07T10:34:41,ProvisionUser,failure,N/A,provision_user.py,James.Okafor,"Add-ADGroupMember : Cannot find an object with identity: 'Finance' under: 'DC=corp,DC=local'.
+At line:1 char:1
++ Add-ADGroupMember -Identity ""Finance"" -Members ""James.Okafor""
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Finance:ADGroup) [Add-ADGroupMember], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,M 
+   icrosoft.ActiveDirectory.Management.Commands.AddADGroupMember"
+2026-07-07T10:38:18,ProvisionUser,success,INC0010023,provision_user.py,James.Okafor,AD user created. Group: Finance. Dept: Finance.
+2026-07-07T11:26:25,auto_unlock,INFO,INC0010024,auto_unlock.py,Sarah.Blake,Unlocked successfully
