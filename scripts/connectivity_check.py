@@ -3,10 +3,11 @@ import csv
 import os
 import subprocess
 from datetime import datetime
+from servicenow_api import create_servicenow_incident, resolve_incident
 
 HEALTH_LOG_PATH = "logs/health_checks.csv"
 EVIDENCE_DIR = "logs/evidence"
-HEADERS = ["timestamp", "target", "ping_result", "dns_result", "tracert_saved", "overall_status", "notes"]
+HEADERS = ["timestamp", "target", "ping_result", "dns_result", "tracert_saved", "overall_status", "notes", "inc_number"]
 
 
 def run_command(cmd):
@@ -38,7 +39,7 @@ def save_evidence(target, tool, output):
     return filepath
 
 
-def log_health_check(timestamp, target, ping_result, dns_result, tracert_saved, overall_status, notes=""):
+def log_health_check(timestamp, target, ping_result, dns_result, tracert_saved, overall_status, notes="", inc_number=""):
     """Append a summary row to logs/health_checks.csv."""
     os.makedirs("logs", exist_ok=True)
     file_exists = os.path.isfile(HEALTH_LOG_PATH)
@@ -53,7 +54,8 @@ def log_health_check(timestamp, target, ping_result, dns_result, tracert_saved, 
             "dns_result": dns_result,
             "tracert_saved": tracert_saved,
             "overall_status": overall_status,
-            "notes": notes
+            "notes": notes,
+            "inc_number": inc_number
         })
     print(f"[LOGGED] ConnectivityCheck | {overall_status} | {target}")
 
@@ -102,6 +104,16 @@ def connectivity_check(target):
 
     notes = "; ".join(notes_parts) if notes_parts else "all checks passed"
 
+    inc_number, sys_id = create_servicenow_incident(
+        short_description=f"Connectivity check — {target}",
+        category="Network",
+        details=f"Ping: {ping_result}, DNS: {dns_result}, Overall status: {overall_status}"
+    )
+    print(f"[+] ServiceNow incident raised: {inc_number}")
+
+    resolve_incident(sys_id, resolution_notes=f"Connectivity check completed for {target}. Ping: {ping_result}. DNS: {dns_result}. Overall status: {overall_status}.")
+    print(f"[+] Incident resolved: {inc_number}")
+
     log_health_check(
         timestamp=timestamp,
         target=target,
@@ -109,7 +121,8 @@ def connectivity_check(target):
         dns_result=dns_result,
         tracert_saved=tracert_saved,
         overall_status=overall_status,
-        notes=notes
+        notes=notes,
+        inc_number=inc_number
     )
 
     print(f"[DONE] Connectivity check complete -- {target} | {overall_status}")
