@@ -435,7 +435,7 @@ Ticket Queue:
 | 2 | Locked account | Sarah.Blake is locked out — simulate via PowerShell (`Set-ADUser -Replace @{lockoutTime=1}`), run auto_unlock.py, verify with PowerShell |
 | 3 | Connectivity | A user cannot reach the server — run connectivity_check.py against 192.168.10.10 (server's current Host-only adapter IP; may drift due to DHCP — verify via ipconfig if needed), review the evidence file, document findings. Note: ServiceNow incident raise/resolve was added to connectivity_check.py during this session — the script now automatically raises and resolves an incident, in line with the other workflow scripts. |
 | 4 | Offboarding | A contractor's account needs disabling — run offboard_user.py, verify in AD and confirm groups are cleared |
-| 5 | Health check | Export system errors with PowerShell, run log_analyser.py, confirm no critical unresolved errors |
+| 5 | Health check | Export system errors with PowerShell (C:\logs\system_errors.csv), copy to logs/, run log_analyser.py --input logs/system_errors.csv. Script auto-raises and resolves a ServiceNow incident for the most recent error — this confirms the logging/automation workflow, not that the underlying fault is fixed (e.g. found real snc_mid_CORP-DC1-MID service logon failures needing manual follow-up)
 
 Rules:
 - Raise a real ServiceNow Incident for each ticket
