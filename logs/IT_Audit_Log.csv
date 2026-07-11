@@ -233,3 +233,5 @@ At line:1 char:1
    icrosoft.ActiveDirectory.Management.Commands.AddADGroupMember"
 2026-07-07T10:38:18,ProvisionUser,success,INC0010023,provision_user.py,James.Okafor,AD user created. Group: Finance. Dept: Finance.
 2026-07-07T11:26:25,auto_unlock,INFO,INC0010024,auto_unlock.py,Sarah.Blake,Unlocked successfully
+2026-07-10T11:43:54,OffboardUser,success,INC0010026,offboard_user.py,James.Okafor,"Account disabled, groups removed, moved to Disabled Users OU"
+2026-07-11T14:08:58,LogAnalysis,success,INC0010027,log_analyser.py,WindowsServer2022,Analysed 20 system errors

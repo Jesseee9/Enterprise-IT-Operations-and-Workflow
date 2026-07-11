@@ -1,5 +1,33 @@
 "TimeGenerated","Source","Message"
-"6/20/2026 11:10:56 AM","EventLog","The previous system shutdown at 4:21:00 PM on 6/18/2026 was unexpected."
-"6/18/2026 1:23:34 PM","EventLog","The previous system shutdown at 2:22:46 PM on 6/17/2026 was unexpected."
-"6/17/2026 1:44:45 PM","EventLog","The previous system shutdown at 5:44:20 PM on 6/15/2026 was unexpected."
-"6/15/2026 5:02:19 PM","EventLog","The previous system shutdown at 4:45:15 PM on 6/14/2026 was unexpected."
+"7/10/2026 11:37:39 AM","Service Control Manager","The snc_mid_CORP-DC1-MID service failed to start due to the following error: 
+%%1069"
+"7/10/2026 11:37:39 AM","Service Control Manager","The snc_mid_CORP-DC1-MID service terminated unexpectedly.  It has done this 1 time(s)."
+"7/10/2026 11:37:39 AM","Service Control Manager","The snc_mid_CORP-DC1-MID service was unable to log on as CORP\svc_mid with the currently configured password due to the following error: 
+%%1326
+
+To ensure that the service is configured properly, use the Services snap-in in Microsoft Management Console (MMC)."
+"7/10/2026 11:37:09 AM","EventLog","The previous system shutdown at 2:23:07 AM on ?7/?9/?2026 was unexpected."
+"7/9/2026 1:44:06 AM","EventLog","The previous system shutdown at 12:21:14 PM on ?7/?7/?2026 was unexpected."
+"7/7/2026 10:26:38 AM","EventLog","The previous system shutdown at 12:20:26 PM on ?6/?25/?2026 was unexpected."
+"6/25/2026 12:11:26 PM","EventLog","The previous system shutdown at 11:43:56 AM on ?6/?20/?2026 was unexpected."
+"6/20/2026 11:10:56 AM","EventLog","The previous system shutdown at 4:21:00 PM on ?6/?18/?2026 was unexpected."
+"6/18/2026 1:23:34 PM","EventLog","The previous system shutdown at 2:22:46 PM on ?6/?17/?2026 was unexpected."
+"6/17/2026 1:44:45 PM","EventLog","The previous system shutdown at 5:44:20 PM on ?6/?15/?2026 was unexpected."
+"6/15/2026 5:02:19 PM","EventLog","The previous system shutdown at 4:45:15 PM on ?6/?14/?2026 was unexpected."
+"6/14/2026 3:45:14 PM","EventLog","The previous system shutdown at 8:58:20 AM on ?6/?8/?2026 was unexpected."
+"6/8/2026 8:19:19 AM","EventLog","The previous system shutdown at 8:18:27 AM on ?6/?8/?2026 was unexpected."
+"6/8/2026 7:38:00 AM","Service Control Manager","The snc_mid_CORP-DC1-MID service failed to start due to the following error: 
+%%1069"
+"6/8/2026 7:38:00 AM","Service Control Manager","The snc_mid_CORP-DC1-MID service terminated unexpectedly.  It has done this 1 time(s)."
+"6/8/2026 7:38:00 AM","Service Control Manager","The snc_mid_CORP-DC1-MID service was unable to log on as CORP\svc_mid with the currently configured password due to the following error: 
+%%1326
+
+To ensure that the service is configured properly, use the Services snap-in in Microsoft Management Console (MMC)."
+"6/8/2026 7:37:27 AM","EventLog","The previous system shutdown at 3:52:18 PM on ?6/?6/?2026 was unexpected."
+"6/6/2026 1:27:50 PM","Service Control Manager","The snc_mid_CORP-DC1-MID service failed to start due to the following error: 
+%%1069"
+"6/6/2026 1:27:50 PM","Service Control Manager","The snc_mid_CORP-DC1-MID service terminated unexpectedly.  It has done this 1 time(s)."
+"6/6/2026 1:27:50 PM","Service Control Manager","The snc_mid_CORP-DC1-MID service was unable to log on as CORP\svc_mid with the currently configured password due to the following error: 
+%%1326
+
+To ensure that the service is configured properly, use the Services snap-in in Microsoft Management Console (MMC)."

@@ -44,7 +44,7 @@ def log_health_check(timestamp, target, ping_result, dns_result, tracert_saved, 
     os.makedirs("logs", exist_ok=True)
     file_exists = os.path.isfile(HEALTH_LOG_PATH)
     with open(HEALTH_LOG_PATH, "a", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=HEADERS)
+        writer = csv.DictWriter(f, fieldnames=HEADERS, quoting=csv.QUOTE_ALL)
         if not file_exists:
             writer.writeheader()
         writer.writerow({
